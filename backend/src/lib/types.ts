@@ -19,3 +19,4 @@ export interface Database {
 export interface Context {
   db: Database;
 }
+
