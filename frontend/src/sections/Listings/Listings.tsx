@@ -9,6 +9,7 @@ import {
   DeleteListingVariables as IDeleteListingVariables,
 } from "../../graphql/__generated__/DeleteListing";
 import { ListingShimmer } from "./components/ListingShimmer";
+import "./styles/Listings.css";
 
 export const Listings = () => {
   const { data, loading, error, refetch } =
