@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nodemon src/index.ts",
     "build": "tsc -p ./",
-    "seed": "ts-node scripts/seed.ts"
+    "seed": "ts-node scripts/seed.ts",
+    "clear": "ts-node scripts/clear.ts"
   },
   "dependencies": {
     "apollo-server-express": "^2.25.0",
