@@ -2,12 +2,21 @@ import React from "react";
 import { ApolloProvider } from "@apollo/client";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { client } from "./graphql";
-import { Home, NotFound, Listing, Listings, User, Host } from "./sections";
+import {
+  Home,
+  NotFound,
+  Listing,
+  Listings,
+  User,
+  Host,
+  Login,
+} from "./sections";
+import Layout from "antd/lib/layout";
 
 function App() {
   return (
     <ApolloProvider client={client}>
-      <div className="App">
+      <Layout id="App">
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
@@ -15,10 +24,11 @@ function App() {
             <Route exact path="/listings/:location?" component={Listings} />
             <Route exact path="/listing/:location" component={Listing} />
             <Route exact path="/user/:id" component={User} />
+            <Route exact path="/login" component={Login} />
             <Route component={NotFound} />
           </Switch>
         </Router>
-      </div>
+      </Layout>
     </ApolloProvider>
   );
 }
