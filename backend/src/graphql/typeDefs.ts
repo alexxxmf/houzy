@@ -33,6 +33,6 @@ export const typeDefs = gql`
   type Mutation {
     deleteListing(id: ID!): Listing!
     logIn(input: LogInInput): Viewer!
-    logOut: String!
+    logOut: Viewer!
   }
 `;

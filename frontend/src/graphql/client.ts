@@ -3,16 +3,6 @@ import { ApolloClient, InMemoryCache } from "@apollo/client";
 export const client = new ApolloClient({
   uri: process.env.REACT_APP_GRAPHQL_ENDPOINT,
   cache: new InMemoryCache({
-    typePolicies: {
-      Listing: {
-        keyFields: ["id"],
-      },
-      listings: {
-        keyFields: ["id"],
-      },
-      listing: {
-        keyFields: ["id"],
-      },
-    },
+    typePolicies: {},
   }),
 });
