@@ -34,7 +34,12 @@ export const Login = ({ setViewer }: ILoginProps) => {
       onError: (error) => {
         // TODO: we need this to prevent the app from blowing up when user maliciously passes a random string as code param
         // find a way to handle it more elegantly
-        return error;
+        console.error(error);
+        // This is for Network errors which is different than the case for errors within a query, those return a 200 but with
+        // the errors property populated
+        displayErrorMessage(
+          `Sorry! We weren't able to log you in. Please try again later!`
+        );
       },
     });
 

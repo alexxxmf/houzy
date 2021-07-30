@@ -9,6 +9,8 @@ export const logInViagoogle = async (
   token: string,
   db: Database
 ): Promise<User | undefined> => {
+  // If a bad formed code is being passed we should expect this error | invalid_grant
+  // data: { error: 'invalid_grant', error_description: 'Malformed auth code.'}
   const { user } = await Google.logIn(code);
 
   if (!user) {

@@ -13,6 +13,7 @@ import {
 } from "./sections";
 import Layout from "antd/lib/layout";
 import { Viewer } from "./types";
+import { AppHeader } from "./sections/AppHeader";
 
 const initialViewer: Viewer = {
   id: null,
@@ -29,6 +30,7 @@ const App = () => {
     <ApolloProvider client={client}>
       <Layout id="app">
         <Router>
+          <AppHeader setViewer={setViewer} viewer={viewer} />
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/host" component={Host} />
