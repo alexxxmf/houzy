@@ -11,14 +11,14 @@ import {
 } from "../../../../utils";
 import { Viewer } from "../../../../types";
 
-interface Props {
+interface IProps {
   viewer: Viewer;
   setViewer: (viewer: Viewer) => void;
 }
 
 const { Item, SubMenu } = Menu;
 
-export const MenuItems = ({ viewer, setViewer }: Props) => {
+export const MenuItems = ({ viewer, setViewer }: IProps) => {
   const [logOut] = useMutation<ILogOutData>(MUTATION_LOG_OUT, {
     onCompleted: (data) => {
       if (data && data.logOut) {

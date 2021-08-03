@@ -1,13 +1,23 @@
 import crypto from "crypto";
 import { IResolvers } from "apollo-server-express";
 import { Google } from "../../../lib/api";
-import { Database, User, Viewer } from "../../../lib/types";
+import { Context, User, Viewer } from "../../../lib/types";
 import { LogInArgs } from "./types";
 
-export const logInViagoogle = async (
+const KEY_VIEWER_COOKIE = "viewer";
+
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: true,
+  signed: true,
+  secure: process.env.NODE_ENV === "development" ? false : true,
+};
+
+export const logInViaGoogle = async (
   code: string,
   token: string,
-  db: Database
+  db: Context["db"],
+  res: Context["res"]
 ): Promise<User | undefined> => {
   // If a bad formed code is being passed we should expect this error | invalid_grant
   // data: { error: 'invalid_grant', error_description: 'Malformed auth code.'}
@@ -71,6 +81,32 @@ export const logInViagoogle = async (
     viewer = insertResult.ops[0];
   }
 
+  res.cookie(KEY_VIEWER_COOKIE, userId, {
+    ...cookieOptions,
+    maxAge: 365 * 24 * 60 * 60 * 1000,
+  });
+
+  return viewer;
+};
+
+const logInViaCookie = async (
+  token: string,
+  db: Context["db"],
+  req: Context["req"],
+  res: Context["res"]
+): Promise<User | undefined> => {
+  const updateRes = await db.users.findOneAndUpdate(
+    { _id: req.signedCookies.viewer },
+    { $set: { token } },
+    { returnOriginal: false }
+  );
+
+  const viewer = updateRes.value;
+
+  if (!viewer) {
+    res.clearCookie("viewer", cookieOptions);
+  }
+
   return viewer;
 };
 
@@ -88,15 +124,15 @@ export const viewerResolvers: IResolvers = {
     logIn: async (
       _root: undefined,
       { input }: LogInArgs,
-      { db }: { db: Database }
+      { db, res, req }: Context
     ) => {
       try {
         const code = input ? input.code : null;
         const token = crypto.randomBytes(16).toString("hex");
 
         const viewer: User | undefined = code
-          ? await logInViagoogle(code, token, db)
-          : undefined;
+          ? await logInViaGoogle(code, token, db, res)
+          : await logInViaCookie(token, db, req, res);
 
         if (!viewer) {
           return { didRequest: true };
@@ -113,8 +149,14 @@ export const viewerResolvers: IResolvers = {
         throw new Error(`Failed to log in: ${e}`);
       }
     },
-    logOut: (): Viewer => {
+    logOut: (
+      _root: undefined,
+      _variables: undefined,
+      { res }: Context
+    ): Viewer => {
       try {
+        res.clearCookie(KEY_VIEWER_COOKIE, cookieOptions);
+
         return { didRequest: true };
       } catch (e) {
         throw new Error(`Failed to log out: ${e}`);
