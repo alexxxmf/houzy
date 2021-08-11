@@ -4,7 +4,7 @@ import { Layout } from "antd";
 import { Viewer } from "../../types";
 import { MenuItems } from "./components";
 
-import logo from "../../assets/google_logo.jpg";
+import logo from "../../assets/houzy.png";
 
 interface Props {
   viewer: Viewer;

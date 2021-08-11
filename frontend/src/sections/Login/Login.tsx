@@ -42,7 +42,7 @@ export const Login = ({ setViewer }: ILoginProps) => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const code = urlSearchParams.get("code") ?? "";
 
-    logInRef.current({ variables: { code } });
+    logInRef.current({ variables: { input: { code } } });
   }, []);
 
   const onClickHandler = async () => {
