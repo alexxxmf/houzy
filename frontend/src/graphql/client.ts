@@ -1,6 +1,7 @@
 import {
   ApolloClient,
   from,
+  concat,
   InMemoryCache,
   HttpLink,
   ApolloLink,
@@ -10,8 +11,15 @@ const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_ENDPOINT });
 
 const authMiddleware = new ApolloLink((operation, forward) => {
   const csrfToken = sessionStorage.getItem(
-    process.env.REACT_CSRF_TOKEN_KEY || ""
+    process.env.REACT_APP_CSRF_TOKEN_KEY || ""
   );
+
+  console.log(
+    "check|process.env.REACT_CSRF_TOKEN_KEY",
+    process.env.REACT_APP_CSRF_TOKEN_KEY || ""
+  );
+
+  console.log("check|csrfToken", csrfToken);
 
   operation.setContext(({ headers = {} }) => ({
     headers: {
@@ -29,5 +37,5 @@ export const client = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {},
   }),
-  link: from([httpLink, authMiddleware]),
+  link: concat(authMiddleware, httpLink),
 });

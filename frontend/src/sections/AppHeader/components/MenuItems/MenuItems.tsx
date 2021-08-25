@@ -41,17 +41,17 @@ export const MenuItems = ({ viewer, setViewer }: IProps) => {
 
   const subMenuLogin =
     viewer.id && viewer.avatar ? (
-      <SubMenu title={<Avatar src={viewer.avatar} />}>
+      <SubMenu key="user-menu" title={<Avatar src={viewer.avatar} />}>
         <Item key="/user">
           <Link to={`/user/${viewer.id}`}>
-            <Icon type="user">
+            <Icon viewBox="0 0 1024 1024" type="user">
               Profile
             </Icon>
           </Link>
         </Item>
         <Item key="/logout">
           <div onClick={handleLogOut}>
-            <Icon type="logout">
+            <Icon viewBox="0 0 1024 1024" type="logout">
               Log out
             </Icon>
           </div>
@@ -69,7 +69,7 @@ export const MenuItems = ({ viewer, setViewer }: IProps) => {
     <Menu mode="horizontal" selectable={false} className="menu">
       <Item key="/host">
         <Link to="/host">
-          <Icon type="home">
+          <Icon viewBox="0 0 1024 1024" type="home">
             Host
           </Icon>
         </Link>

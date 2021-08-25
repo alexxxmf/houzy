@@ -40,9 +40,14 @@ const App = () => {
         setViewer(logInData.logIn);
 
         if (logInData?.logIn?.token) {
-          sessionStorage.setItem(process.env.REACT_CSRF_TOKEN_KEY || "", logInData.logIn.token);
+          sessionStorage.setItem(
+            process.env.REACT_APP_CSRF_TOKEN_KEY || "",
+            logInData.logIn.token
+          );
         } else {
-          sessionStorage.removeItem(process.env.REACT_CSRF_TOKEN_KEY || "");
+          sessionStorage.removeItem(
+            process.env.REACT_APP_CSRF_TOKEN_KEY || "" || ""
+          );
         }
       }
     },

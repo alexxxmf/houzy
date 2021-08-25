@@ -38,11 +38,14 @@ export const Login = ({ setViewer }: ILoginProps) => {
 
   const logInRef = useRef(logIn);
 
+  console.log("check|logInData", logInData);
+
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const code = urlSearchParams.get("code") ?? "";
-
-    logInRef.current({ variables: { input: { code } } });
+    if (code) {
+      logInRef.current({ variables: { input: { code } } });
+    }
   }, []);
 
   const onClickHandler = async () => {
@@ -70,6 +73,7 @@ export const Login = ({ setViewer }: ILoginProps) => {
 
   if (logInData?.logIn?.id) {
     const { id: viewerId } = logInData.logIn;
+    console.log("true", `/user/${viewerId}`);
     return <Redirect to={`/user/${viewerId}`} />;
   }
 
