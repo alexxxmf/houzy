@@ -1,6 +1,5 @@
 import {
   ApolloClient,
-  from,
   concat,
   InMemoryCache,
   HttpLink,
@@ -13,13 +12,6 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   const csrfToken = sessionStorage.getItem(
     process.env.REACT_APP_CSRF_TOKEN_KEY || ""
   );
-
-  console.log(
-    "check|process.env.REACT_CSRF_TOKEN_KEY",
-    process.env.REACT_APP_CSRF_TOKEN_KEY || ""
-  );
-
-  console.log("check|csrfToken", csrfToken);
 
   operation.setContext(({ headers = {} }) => ({
     headers: {
