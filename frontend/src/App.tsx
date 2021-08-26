@@ -45,9 +45,9 @@ const App = () => {
             logInData.logIn.token
           );
         } else {
-          sessionStorage.removeItem(
-            process.env.REACT_APP_CSRF_TOKEN_KEY || "" || ""
-          );
+          // sessionStorage.removeItem(
+          //   process.env.REACT_APP_CSRF_TOKEN_KEY || "" || ""
+          // );
         }
       }
     },
@@ -59,6 +59,7 @@ const App = () => {
   const logInRef = useRef(logIn);
 
   useEffect(() => {
+    console.log("check|app");
     logInRef.current();
   }, []);
 

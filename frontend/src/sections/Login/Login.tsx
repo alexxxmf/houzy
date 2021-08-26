@@ -38,12 +38,11 @@ export const Login = ({ setViewer }: ILoginProps) => {
 
   const logInRef = useRef(logIn);
 
-  console.log("check|logInData", logInData);
-
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const code = urlSearchParams.get("code") ?? "";
     if (code) {
+      console.log("check|login");
       logInRef.current({ variables: { input: { code } } });
     }
   }, []);
