@@ -59,7 +59,6 @@ const App = () => {
   const logInRef = useRef(logIn);
 
   useEffect(() => {
-    console.log("check|app");
     logInRef.current();
   }, []);
 

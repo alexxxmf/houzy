@@ -42,7 +42,6 @@ export const Login = ({ setViewer }: ILoginProps) => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const code = urlSearchParams.get("code") ?? "";
     if (code) {
-      console.log("check|login");
       logInRef.current({ variables: { input: { code } } });
     }
   }, []);
@@ -72,7 +71,6 @@ export const Login = ({ setViewer }: ILoginProps) => {
 
   if (logInData?.logIn?.id) {
     const { id: viewerId } = logInData.logIn;
-    console.log("true", `/user/${viewerId}`);
     return <Redirect to={`/user/${viewerId}`} />;
   }
 

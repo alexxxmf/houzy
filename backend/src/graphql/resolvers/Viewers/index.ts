@@ -19,7 +19,6 @@ export const logInViaGoogle = async (
   db: Context["db"],
   res: Context["res"]
 ): Promise<User | undefined> => {
-  console.log("check|google");
   // If a bad formed code is being passed we should expect this error | invalid_grant
   // data: { error: 'invalid_grant', error_description: 'Malformed auth code.'}
   const { user } = await Google.logIn(code);
@@ -96,14 +95,11 @@ const logInViaCookie = async (
   req: Context["req"],
   res: Context["res"]
 ): Promise<User | undefined> => {
-  console.log("check|cookie|id", req.signedCookies.viewer);
-  console.log("check|cookie|token", token);
   const updateRes = await db.users.findOneAndUpdate(
     { _id: req.signedCookies.viewer },
     { $set: { token } },
     { returnOriginal: false }
   );
-  console.log("check|cookie|updateRes", updateRes);
 
   const viewer = updateRes.value;
 
