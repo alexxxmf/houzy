@@ -17,9 +17,10 @@ import { Viewer } from "../../types";
 
 interface ILoginProps {
   setViewer: (viewer: Viewer) => void;
+  viewer: Viewer;
 }
 
-export const Login = ({ setViewer }: ILoginProps) => {
+export const Login = ({ setViewer, viewer }: ILoginProps) => {
   const apolloClient = useApolloClient();
 
   const [logIn, { data: logInData, loading: logInLoading, error: logInError }] =
@@ -46,6 +47,10 @@ export const Login = ({ setViewer }: ILoginProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    console.log("check|useEffect|logInData", logInData);
+  }, [logInData]);
+
   const onClickHandler = async () => {
     try {
       const {
@@ -69,8 +74,8 @@ export const Login = ({ setViewer }: ILoginProps) => {
     );
   }
 
-  if (logInData?.logIn?.id) {
-    const { id: viewerId } = logInData.logIn;
+  if (logInData?.logIn?.id || viewer.id) {
+    const viewerId = logInData?.logIn?.id ?? viewer.id;
     return <Redirect to={`/user/${viewerId}`} />;
   }
 

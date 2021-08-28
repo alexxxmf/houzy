@@ -91,7 +91,9 @@ const App = () => {
           <Route
             exact
             path="/login"
-            render={(props) => <Login {...props} setViewer={setViewer} />}
+            render={(props) => (
+              <Login {...props} setViewer={setViewer} viewer={viewer} />
+            )}
           />
           <Route component={NotFound} />
         </Switch>
