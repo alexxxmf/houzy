@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { Avatar, Button, Menu } from "antd";
 import Icon from "@ant-design/icons";
@@ -19,6 +19,7 @@ interface IProps {
 const { Item, SubMenu } = Menu;
 
 export const MenuItems = ({ viewer, setViewer }: IProps) => {
+  const history = useHistory();
   const [logOut] = useMutation<ILogOutData>(MUTATION_LOG_OUT, {
     onCompleted: (data) => {
       if (data && data.logOut) {
@@ -26,6 +27,7 @@ export const MenuItems = ({ viewer, setViewer }: IProps) => {
         setViewer(data.logOut);
         sessionStorage.removeItem("token");
         displaySuccessNotification("You've successfully logged out!");
+        history.push("/login");
       }
     },
     onError: () => {
