@@ -44,16 +44,14 @@ export const MenuItems = ({ viewer, setViewer }: IProps) => {
       <SubMenu key="user-menu" title={<Avatar src={viewer.avatar} />}>
         <Item key="/user">
           <Link to={`/user/${viewer.id}`}>
-            <Icon viewBox="0 0 1024 1024" type="user">
-              Profile
-            </Icon>
+            <Icon viewBox="0 0 1024 1024" type="user" />
+            Profile
           </Link>
         </Item>
         <Item key="/logout">
           <div onClick={handleLogOut}>
-            <Icon viewBox="0 0 1024 1024" type="logout">
-              Log out
-            </Icon>
+            <Icon viewBox="0 0 1024 1024" type="logout" />
+            Log out
           </div>
         </Item>
       </SubMenu>
