@@ -43,6 +43,10 @@ export interface Listing {
   numOfGuests: number;
 }
 
+export interface UserArgs {
+  id: string;
+}
+
 export interface User {
   _id: string;
   token: string;
@@ -53,6 +57,7 @@ export interface User {
   income: number;
   bookings: IObjectId[];
   listings: IObjectId[];
+  authorized?: boolean;
 }
 
 export interface Booking {
