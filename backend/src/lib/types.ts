@@ -43,10 +43,6 @@ export interface Listing {
   numOfGuests: number;
 }
 
-export interface UserArgs {
-  id: string;
-}
-
 export interface User {
   _id: string;
   token: string;
