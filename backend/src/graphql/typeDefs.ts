@@ -28,7 +28,7 @@ export const typeDefs = gql`
     type: ListingType!
     address: String!
     city: String!
-    bookings(limit: Int!. page: Int!): Bookings
+    bookings(limit: Int!, page: Int!): Bookings
     bookingsIndex: String!
     price: Int!
     numOfGuests: Int!
@@ -62,26 +62,12 @@ export const typeDefs = gql`
     code: String!
   }
 
-  type Listing {
-    id: ID!
-    title: String!
-    image: String!
-    address: String!
-    price: Int!
-    numOfGuests: Int!
-    numOfBeds: Int!
-    numOfBaths: Int!
-    rating: Int!
-  }
-
   type Query {
-    listings: [Listing!]!
     authUrl: String!
     user(id: ID!): User!
   }
 
   type Mutation {
-    deleteListing(id: ID!): Listing!
     logIn(input: LogInInput): Viewer!
     logOut: Viewer!
   }
