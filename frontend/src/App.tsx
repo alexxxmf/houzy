@@ -87,7 +87,11 @@ const App = () => {
           <Route exact path="/host" component={Host} />
           <Route exact path="/listings/:location?" component={Listings} />
           <Route exact path="/listing/:location" component={Listing} />
-          <Route exact path="/user/:id" component={User} />
+          <Route
+            exact
+            path="/user/:id"
+            render={(props) => <User {...props} viewer={viewer} />}
+          />
           <Route
             exact
             path="/login"
