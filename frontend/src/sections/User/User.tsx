@@ -1,20 +1,23 @@
 import React from "react";
 import { useQuery } from "@apollo/client";
 import { RouteComponentProps } from "react-router-dom";
-import { Content } from "antd/lib/layout/layout";
 
 import { QUERY_USER } from "../../graphql";
 import {
   UserVariables as IUserVariables,
-  User_user as IUserData,
+  User as IUserData,
 } from "../../graphql/queries/__generated__/User";
 import { Viewer } from "../../types";
 import { PageSkeleton } from "../../components/PageSkeleton";
 import { ErrorBanner } from "../../components";
+import { Col, Row, Layout } from "antd";
+import UserProfile from "./components/UserProfile";
 
 type IProps = RouteComponentProps<{ id: string }> & {
   viewer: Viewer;
 };
+
+const { Content } = Layout;
 
 export const User = ({ viewer, match }: IProps) => {
   const userId = match.params.id;
@@ -44,5 +47,13 @@ export const User = ({ viewer, match }: IProps) => {
     );
   }
 
-  return <h2>User</h2>;
+  const user = userData?.user ?? null;
+
+  return (
+    <Content className="user">
+      <Row gutter={12} justify="space-between">
+        <Col xs={24}>{user ? <UserProfile user={user} /> : null}</Col>
+      </Row>
+    </Content>
+  );
 };
