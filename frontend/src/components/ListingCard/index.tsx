@@ -28,8 +28,11 @@ const ListingCard = ({ listing }: IProps) => {
             {price}
             <span>/day</span>
           </Title>
-          <Text strong ellipsis className="listing-card_address">
+          <Text strong ellipsis className="listing-card_title">
             {title}
+          </Text>
+          <Text strong ellipsis className="listing-card_address">
+            {address}
           </Text>
         </div>
         <div className="listing-card__dimensions listing-card__dimensions--guests">
