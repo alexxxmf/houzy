@@ -48,11 +48,16 @@ export const User = ({ viewer, match }: IProps) => {
   }
 
   const user = userData?.user ?? null;
+  const viewerIsUser = viewer.id === userId;
 
   return (
     <Content className="user">
       <Row gutter={12} justify="space-between">
-        <Col xs={24}>{user ? <UserProfile user={user} /> : null}</Col>
+        <Col xs={24}>
+          {user ? (
+            <UserProfile user={user} viewerIsUser={viewerIsUser} />
+          ) : null}
+        </Col>
       </Row>
     </Content>
   );
