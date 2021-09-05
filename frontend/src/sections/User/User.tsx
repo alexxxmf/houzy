@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { RouteComponentProps } from "react-router-dom";
 
@@ -19,15 +19,19 @@ type IProps = RouteComponentProps<{ id: string }> & {
 
 const { Content } = Layout;
 
+const PAGE_LIMIT = 4;
+
 export const User = ({ viewer, match }: IProps) => {
   const userId = match.params.id;
+  const [bookingsPage, setBookingsPage] = useState(1);
+  const [listingsPage, setListingsPage] = useState(1);
 
   const {
     data: userData,
     loading: userLoading,
     error: userError,
   } = useQuery<IUserData, IUserVariables>(QUERY_USER, {
-    variables: { id: userId },
+    variables: { id: userId, bookingsPage, listingsPage, limit: PAGE_LIMIT },
   });
 
   if (userLoading) {
@@ -49,6 +53,8 @@ export const User = ({ viewer, match }: IProps) => {
 
   const user = userData?.user ?? null;
   const viewerIsUser = viewer.id === userId;
+  const userBookings = user?.bookings ?? null;
+  const userListings = user?.listings ?? null;
 
   return (
     <Content className="user">
