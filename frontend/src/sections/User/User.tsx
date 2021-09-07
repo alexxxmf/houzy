@@ -12,6 +12,7 @@ import { PageSkeleton } from "../../components/PageSkeleton";
 import { ErrorBanner } from "../../components";
 import { Col, Row, Layout } from "antd";
 import UserProfile from "./components/UserProfile";
+import UserListings from "./components/UserListings";
 
 type IProps = RouteComponentProps<{ id: string }> & {
   viewer: Viewer;
@@ -62,6 +63,16 @@ export const User = ({ viewer, match }: IProps) => {
         <Col xs={24}>
           {user ? (
             <UserProfile user={user} viewerIsUser={viewerIsUser} />
+          ) : null}
+        </Col>
+        <Col xs={24}>
+          {userListings ? (
+            <UserListings
+              page={listingsPage}
+              limit={PAGE_LIMIT}
+              userListings={userListings}
+              setPage={setListingsPage}
+            />
           ) : null}
         </Col>
       </Row>
