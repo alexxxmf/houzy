@@ -13,6 +13,7 @@ import { ErrorBanner } from "../../components";
 import { Col, Row, Layout } from "antd";
 import UserProfile from "./components/UserProfile";
 import UserListings from "./components/UserListings";
+import UserBookings from "./components/UserBookings";
 
 type IProps = RouteComponentProps<{ id: string }> & {
   viewer: Viewer;
@@ -72,6 +73,14 @@ export const User = ({ viewer, match }: IProps) => {
               limit={PAGE_LIMIT}
               userListings={userListings}
               setPage={setListingsPage}
+            />
+          ) : null}
+          {userBookings ? (
+            <UserBookings
+              page={bookingsPage}
+              limit={PAGE_LIMIT}
+              userBookings={userBookings}
+              setPage={setBookingsPage}
             />
           ) : null}
         </Col>
