@@ -11,7 +11,7 @@ interface IProps {
 }
 
 const UserBookings = ({ page, limit, userBookings, setPage }: IProps) => {
-  const userBookingsList = (
+  const userBookingsList = userBookings.total && userBookings.result && (
     <List
       grid={{ gutter: 8, xs: 1, sm: 2, lg: 4 }}
       dataSource={userBookings.result}
