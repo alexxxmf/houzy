@@ -5,20 +5,20 @@ import { User_user_bookings as IUserBookings } from "../../../graphql/queries/__
 
 interface IProps {
   page: number;
-  userBookings: IUserBookings;
+  userBookings?: IUserBookings;
   limit: number;
   setPage: (pageNumber: number) => void;
 }
 
 const UserBookings = ({ page, limit, userBookings, setPage }: IProps) => {
-  const userBookingsList = userBookings.total && userBookings.result && (
+  const userBookingsList = userBookings && (
     <List
       grid={{ gutter: 8, xs: 1, sm: 2, lg: 4 }}
-      dataSource={userBookings.result}
+      dataSource={userBookings.result ?? undefined}
       locale={{ emptyText: "You haven't made any bookings yet!" }}
       pagination={{
         position: "top",
-        total: userBookings.total,
+        total: userBookings.total ?? undefined,
         current: page,
         defaultPageSize: limit,
         hideOnSinglePage: true,
