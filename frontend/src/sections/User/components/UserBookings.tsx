@@ -27,6 +27,16 @@ const UserBookings = ({ page, limit, userBookings, setPage }: IProps) => {
       }}
       renderItem={(userBooking) => (
         <List.Item>
+          <div className="user-bookings__booking-history">
+            <div>
+              Check in:
+              <Typography.Text strong>{userBooking.checkIn}</Typography.Text>
+            </div>
+            <div>
+              Check out:
+              <Typography.Text strong>{userBooking.checkOut}</Typography.Text>
+            </div>
+          </div>
           <ListingCard listing={userBooking.listing} />
         </List.Item>
       )}
