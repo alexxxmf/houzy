@@ -17,10 +17,16 @@ const { Text, Title } = Typography;
 
 const ListingCard = ({ listing }: IProps) => {
   const { title, image, address, price, numOfGuests } = listing;
+  console.log("check|image", image);
   return (
     <Card
       hoverable
-      cover={<div style={{ backgroundImage: `url(${image})` }} />}
+      cover={
+        <div
+          className="listing-card__cover-img"
+          style={{ backgroundImage: `url(${image})` }}
+        />
+      }
     >
       <div className="listing-card__details">
         <div className="listing-card__description">
@@ -28,10 +34,10 @@ const ListingCard = ({ listing }: IProps) => {
             {price}
             <span>/day</span>
           </Title>
-          <Text strong ellipsis className="listing-card_title">
+          <Text strong ellipsis className="listing-card__title">
             {title}
           </Text>
-          <Text strong ellipsis className="listing-card_address">
+          <Text strong ellipsis className="listing-card__address">
             {address}
           </Text>
         </div>
