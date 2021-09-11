@@ -40,12 +40,12 @@ const ListingCard = ({ listing }: IProps) => {
             <Text strong ellipsis className="listing-card__title">
               {title}
             </Text>
-            <Text strong ellipsis className="listing-card__address">
+            <Text ellipsis className="listing-card__address">
               {address}
             </Text>
           </div>
           <div className="listing-card__dimensions listing-card__dimensions--guests">
-            <Icon type="user" />
+            <Icon type="user" style={{ color: "#1890ff" }} />
             <Text>{numOfGuests} guests</Text>
           </div>
         </div>

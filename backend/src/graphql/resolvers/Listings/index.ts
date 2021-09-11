@@ -2,6 +2,10 @@ import { IResolvers } from "apollo-server-express";
 import { Booking, Context, Listing } from "../../../lib/types";
 
 export const listingResolvers: IResolvers = {
+  Query: {
+    listing: () => "Query.listing",
+  },
+
   Listing: {
     id: (listing: Listing): string => {
       return listing._id.toString();
