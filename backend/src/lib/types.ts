@@ -1,4 +1,4 @@
-import { Collection, ObjectId as IObjectId, ObjectID } from "mongodb";
+import { Collection, ObjectId } from "mongodb";
 import { Response, Request } from "express";
 
 export enum ListingType {
@@ -27,7 +27,7 @@ export interface BookingsIndex {
 }
 
 export interface Listing {
-  _id: ObjectID;
+  _id: ObjectId;
   title: string;
   description: string;
   image: string;
@@ -37,7 +37,7 @@ export interface Listing {
   country: string;
   city: string;
   admin: string;
-  bookings: IObjectId[];
+  bookings: ObjectId[];
   bookingsIndex: BookingsIndex;
   price: number;
   numOfGuests: number;
@@ -51,14 +51,14 @@ export interface User {
   contact: string;
   walletId?: string;
   income: number;
-  bookings: IObjectId[];
-  listings: IObjectId[];
+  bookings: ObjectId[];
+  listings: ObjectId[];
   authorized?: boolean;
 }
 
 export interface Booking {
-  _id: ObjectID;
-  listing: IObjectId;
+  _id: ObjectId;
+  listing: ObjectId;
   tenant: string;
   checkIn: string;
   checkOut: string;
