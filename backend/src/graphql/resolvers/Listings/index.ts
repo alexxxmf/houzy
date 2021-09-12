@@ -2,13 +2,13 @@ import { IResolvers } from "apollo-server-express";
 import { ObjectId } from "mongodb";
 import { Booking, Context, Listing } from "../../../lib/types";
 import { authorize } from "../../../utils";
-import { ListingsArgs } from "./types";
+import { ListingArgs, ListingBookingsArgs, ListingBookingsData } from "./types";
 
 export const listingResolvers: IResolvers = {
   Query: {
     listing: async (
       _,
-      { id }: ListingsArgs,
+      { id }: ListingArgs,
       { db, req }: Context
     ): Promise<Listing | null> => {
       const listing = await db.listings.findOne({ _id: new ObjectId(id) });
@@ -31,12 +31,29 @@ export const listingResolvers: IResolvers = {
     },
     bookings: async (
       listing: Listing,
-      _,
+      { limit, page }: ListingBookingsArgs,
       { db }: Context
-    ): Promise<Booking[] | null> => {
-      return await db.bookings
-        .find({ _id: { $in: listing.bookings } })
-        .toArray();
+    ): Promise<ListingBookingsData | null> => {
+      if (!listing.authorized) {
+        return null;
+      }
+
+      const bookingsData: ListingBookingsData = {
+        total: 0,
+        result: [],
+      };
+
+      const bookingsCursor = await db.bookings.find({
+        _id: { $in: listing.bookings },
+      });
+
+      bookingsCursor.limit(limit);
+      bookingsCursor.skip(page > 0 ? (page - 1) * limit : 0);
+
+      bookingsData.total = await bookingsCursor.count();
+      bookingsData.result = await bookingsCursor.toArray();
+
+      return bookingsData;
     },
   },
 };
