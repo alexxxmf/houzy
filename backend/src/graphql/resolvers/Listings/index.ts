@@ -1,6 +1,6 @@
 import { IResolvers } from "apollo-server-express";
 import { ObjectId } from "mongodb";
-import { Booking, Context, Listing } from "../../../lib/types";
+import { Booking, Context, Listing, User } from "../../../lib/types";
 import { authorize } from "../../../utils";
 import { ListingArgs, ListingBookingsArgs, ListingBookingsData } from "./types";
 
@@ -28,6 +28,23 @@ export const listingResolvers: IResolvers = {
   Listing: {
     id: (listing: Listing): string => {
       return listing._id.toString();
+    },
+    host: async (
+      listing: Listing,
+      _,
+      { db }: Context
+    ): Promise<User | null> => {
+      const hostId = listing.host;
+      const hostData = await db.users.findOne({ _id: hostId });
+
+      if (!hostData) {
+        throw new Error("host can't be found");
+      }
+
+      return hostData;
+    },
+    bookingsIndex: (listing: Listing): string => {
+      return JSON.stringify(listing.bookingsIndex);
     },
     bookings: async (
       listing: Listing,
