@@ -1,5 +1,5 @@
 import Icon from "@ant-design/icons";
-import { Divider, Typography } from "antd";
+import { Avatar, Divider, Tag, Typography } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
 import { Listing_listing as IListing } from "../../../../graphql/queries/__generated__/Listing";
@@ -35,6 +35,29 @@ const ListingDetails = ({ listing }: IProps) => {
         <Typography.Title level={3} className="listing-details__title">
           {title}
         </Typography.Title>
+      </div>
+      <Divider />
+
+      <div className="listing-details__section">
+        <Link to={`/user/${host.id}`}>
+          <Avatar src={host.avatar} size={64} />
+          <Typography.Title level={2} className="listing-details__host-name">
+            {host.name}
+          </Typography.Title>
+        </Link>
+      </div>
+
+      <Divider />
+
+      <div className="listing-details__section">
+        <Typography.Title level={4}>About this space</Typography.Title>
+        <div className="listing-details__about-items">
+          <Tag color="magenta">{type}</Tag>
+          <Tag color="magenta">{numOfGuests} Guests</Tag>
+        </div>
+        <Typography.Paragraph ellipsis={{ rows: 3, expandable: true }}>
+          {description}
+        </Typography.Paragraph>
       </div>
     </div>
   );
