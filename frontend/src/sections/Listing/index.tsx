@@ -7,7 +7,7 @@ import {
 } from "../../graphql/queries/__generated__/Listing";
 import { RouteComponentProps } from "react-router-dom";
 import { Viewer } from "../../types";
-import { Layout } from "antd";
+import { Col, Layout, Row } from "antd";
 import { PageSkeleton } from "../../components/PageSkeleton";
 import { ErrorBanner } from "../../components";
 import ListingDetails from "./Components/ListingDetails";
@@ -55,14 +55,19 @@ export const Listing = ({ match, viewer }: IProps) => {
 
   return (
     <Layout.Content className="listing">
-      {listing ? <ListingDetails listing={listing} /> : null}
-
-      <ListingBookings
-        listingBookings={listingBookings}
-        limit={PAGE_LIMIT}
-        page={bookingsPage}
-        setPage={setBookingsPage}
-      />
+      <Row gutter={24} justify="space-between">
+        <Col xs={24} lg={14}>
+          {listing ? <ListingDetails listing={listing} /> : null}
+          {listingBookings ? (
+            <ListingBookings
+              listingBookings={listingBookings}
+              limit={PAGE_LIMIT}
+              page={bookingsPage}
+              setPage={setBookingsPage}
+            />
+          ) : null}
+        </Col>
+      </Row>
     </Layout.Content>
   );
 };
