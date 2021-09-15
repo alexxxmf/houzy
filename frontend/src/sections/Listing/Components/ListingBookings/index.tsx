@@ -37,9 +37,22 @@ const ListingBookings = ({ listingBookings, page, limit, setPage }: IProps) => {
         onChange: (pageNumber: number) => setPage(pageNumber),
       }}
       renderItem={(listingBooking: listingBooking) => {
-        const { tenant } = listingBooking;
+        const { tenant, checkIn, checkOut } = listingBooking;
+
+        const bookingHistory = (
+          <div className="listing-bookings__history">
+            <div>
+              Check in: <Typography.Text strong>{checkIn}</Typography.Text>
+            </div>
+            <div>
+              Check out: <Typography.Text strong>{checkOut}</Typography.Text>
+            </div>
+          </div>
+        );
+
         return (
           <List.Item className="listing-bookings__item">
+            {bookingHistory}
             <Link to={`/user/${tenant.id}`}>
               <Avatar src={tenant.avatar} size={64} shape="square" />
             </Link>
@@ -53,7 +66,7 @@ const ListingBookings = ({ listingBookings, page, limit, setPage }: IProps) => {
     <div className="listing-bookings">
       <Divider />
       <div className="listing-bookings__section">
-        <Title level={4}>Bookings</Title>
+        <Typography.Title level={4}>Bookings</Typography.Title>
       </div>
       {listingBookingsList}
     </div>
