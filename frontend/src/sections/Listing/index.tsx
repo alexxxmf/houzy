@@ -10,6 +10,7 @@ import { Viewer } from "../../types";
 import { Layout } from "antd";
 import { PageSkeleton } from "../../components/PageSkeleton";
 import { ErrorBanner } from "../../components";
+import ListingDetails from "./Components/ListingDetails";
 
 const PAGE_LIMIT = 4;
 
@@ -48,5 +49,11 @@ export const Listing = ({ match, viewer }: IProps) => {
     );
   }
 
-  return <h2>Listing</h2>;
+  const listing = listingData ? listingData.listing : null;
+
+  return (
+    <Layout.Content className="listing">
+      {listing ? <ListingDetails listing={listing} /> : null}
+    </Layout.Content>
+  );
 };
