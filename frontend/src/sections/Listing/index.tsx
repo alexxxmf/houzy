@@ -11,6 +11,7 @@ import { Layout } from "antd";
 import { PageSkeleton } from "../../components/PageSkeleton";
 import { ErrorBanner } from "../../components";
 import ListingDetails from "./Components/ListingDetails";
+import ListingBookings from "./Components/ListingBookings";
 
 const PAGE_LIMIT = 4;
 
@@ -50,10 +51,18 @@ export const Listing = ({ match, viewer }: IProps) => {
   }
 
   const listing = listingData ? listingData.listing : null;
+  const listingBookings = listing ? listing.bookings : null;
 
   return (
     <Layout.Content className="listing">
       {listing ? <ListingDetails listing={listing} /> : null}
+
+      <ListingBookings
+        listingBookings={listingBookings}
+        limit={PAGE_LIMIT}
+        page={bookingsPage}
+        setPage={setBookingsPage}
+      />
     </Layout.Content>
   );
 };

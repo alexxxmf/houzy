@@ -8,7 +8,7 @@ import {
 } from "../../../../graphql/queries/__generated__/Listing";
 
 interface IProps {
-  listingBookings: IListingBooking;
+  listingBookings: IListingBooking | null;
   page: number;
   limit: number;
   setPage: (pageNumber: number) => void;
