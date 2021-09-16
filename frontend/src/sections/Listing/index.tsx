@@ -12,6 +12,7 @@ import { PageSkeleton } from "../../components/PageSkeleton";
 import { ErrorBanner } from "../../components";
 import ListingDetails from "./Components/ListingDetails";
 import ListingBookings from "./Components/ListingBookings";
+import ListingCreateBooking from "./Components/ListingCreateBooking";
 
 const PAGE_LIMIT = 4;
 
@@ -66,6 +67,9 @@ export const Listing = ({ match, viewer }: IProps) => {
               setPage={setBookingsPage}
             />
           ) : null}
+        </Col>
+        <Col xs={24} lg={10}>
+          {listing ? <ListingCreateBooking price={listing.price} /> : null}
         </Col>
       </Row>
     </Layout.Content>
