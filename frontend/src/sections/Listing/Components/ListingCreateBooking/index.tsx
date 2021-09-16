@@ -1,4 +1,4 @@
-import { Card, Typography } from "antd";
+import { Button, Card, Divider, Typography } from "antd";
 import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "../../../../components";
@@ -29,9 +29,36 @@ const ListingCreateBooking = ({
               <span>/day</span>
             </Typography.Title>
           </Typography.Paragraph>
+          <Divider />
+          <div className="listing-booking__card-date-picker">
+            <Typography.Paragraph strong>Check In</Typography.Paragraph>
+            <DatePicker
+              onChange={setCheckInDate}
+              value={checkInDate}
+              format={"YYYY/MM/DD"}
+              showToday={false}
+            />
+          </div>
+          <div className="listing-booking__card-date-picker">
+            <Typography.Paragraph strong>Check Out</Typography.Paragraph>
+            <DatePicker
+              onChange={setCheckOutDate}
+              value={checkOutDate}
+              format={"YYYY/MM/DD"}
+              showToday={false}
+            />
+          </div>
         </div>
+        <Divider />
+        <Button
+          disabled={false}
+          size="large"
+          type="primary"
+          className="listing-booking__card-cta"
+        >
+          Request to book!
+        </Button>
       </Card>
-      <DatePicker onChange={setCheckInDate} value={checkInDate} />
     </div>
   );
 };
