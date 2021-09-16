@@ -6,6 +6,7 @@ import {
   ListingVariables as IListingVariables,
 } from "../../graphql/queries/__generated__/Listing";
 import { RouteComponentProps } from "react-router-dom";
+import dayjs, { Dayjs } from "dayjs";
 import { Viewer } from "../../types";
 import { Col, Layout, Row } from "antd";
 import { PageSkeleton } from "../../components/PageSkeleton";
@@ -25,6 +26,8 @@ const { Content } = Layout;
 export const Listing = ({ match, viewer }: IProps) => {
   const userId = match.params.id;
   const [bookingsPage, setBookingsPage] = useState(1);
+  const [checkInDate, setCheckInDate] = useState<Dayjs | null>(null);
+  const [checkOutDate, setCheckOutDate] = useState<Dayjs | null>(null);
 
   const {
     data: listingData,
@@ -69,7 +72,15 @@ export const Listing = ({ match, viewer }: IProps) => {
           ) : null}
         </Col>
         <Col xs={24} lg={10}>
-          {listing ? <ListingCreateBooking price={listing.price} /> : null}
+          {listing ? (
+            <ListingCreateBooking
+              price={listing.price}
+              checkOutDate={checkOutDate}
+              setCheckOutDate={setCheckOutDate}
+              checkInDate={checkInDate}
+              setCheckInDate={setCheckInDate}
+            />
+          ) : null}
         </Col>
       </Row>
     </Layout.Content>
