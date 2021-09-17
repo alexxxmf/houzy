@@ -19,6 +19,19 @@ const ListingCreateBooking = ({
   checkOutDate,
   setCheckOutDate,
 }: IProps) => {
+  const disabledDate = (currentDate?: Dayjs) => {
+    if (currentDate) {
+      const dateIsBeforeEndOfDay = currentDate.isBefore(dayjs().endOf("day"));
+
+      return dateIsBeforeEndOfDay;
+    } else {
+      return false;
+    }
+  };
+
+  const checkOutInputDisabled = !checkInDate;
+  const buttonDisabled = !checkInDate || !checkOutDate;
+
   return (
     <div className="listing-booking">
       <Card className="listing-booking__card">
@@ -37,6 +50,7 @@ const ListingCreateBooking = ({
               value={checkInDate}
               format={"YYYY/MM/DD"}
               showToday={false}
+              disabledDate={disabledDate}
             />
           </div>
           <div className="listing-booking__card-date-picker">
@@ -44,14 +58,16 @@ const ListingCreateBooking = ({
             <DatePicker
               onChange={setCheckOutDate}
               value={checkOutDate}
+              disabled={checkOutInputDisabled}
               format={"YYYY/MM/DD"}
               showToday={false}
+              disabledDate={disabledDate}
             />
           </div>
         </div>
         <Divider />
         <Button
-          disabled={false}
+          disabled={buttonDisabled}
           size="large"
           type="primary"
           className="listing-booking__card-cta"
