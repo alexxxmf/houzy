@@ -2,7 +2,7 @@ import { Button, Card, Divider, Typography } from "antd";
 import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "../../../../components";
-import { priceFormatter } from "../../../../utils";
+import { displayErrorMessage, priceFormatter } from "../../../../utils";
 
 interface IProps {
   price: number;
@@ -27,6 +27,16 @@ const ListingCreateBooking = ({
     } else {
       return false;
     }
+  };
+  const verifyAndSetCheckOutDate = (selectedCheckOutDate: Dayjs | null) => {
+    if (checkInDate && selectedCheckOutDate) {
+      if (selectedCheckOutDate?.isBefore(checkInDate, "days")) {
+        return displayErrorMessage(
+          `You can't book date of check out to be prior to check in!`
+        );
+      }
+    }
+    setCheckOutDate(selectedCheckOutDate);
   };
 
   const checkOutInputDisabled = !checkInDate;
@@ -56,7 +66,7 @@ const ListingCreateBooking = ({
           <div className="listing-booking__card-date-picker">
             <Typography.Paragraph strong>Check Out</Typography.Paragraph>
             <DatePicker
-              onChange={setCheckOutDate}
+              onChange={verifyAndSetCheckOutDate}
               value={checkOutDate}
               disabled={checkOutInputDisabled}
               format={"YYYY/MM/DD"}
