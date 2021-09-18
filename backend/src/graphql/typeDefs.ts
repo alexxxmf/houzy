@@ -33,6 +33,10 @@ export const typeDefs = gql`
     price: Int!
     numOfGuests: Int!
   }
+  enum ListingsFilter {
+    PRICE_ASC
+    PRICE_DESC
+  }
 
   type Listings {
     total: Int!
@@ -66,6 +70,7 @@ export const typeDefs = gql`
     authUrl: String!
     user(id: ID!): User!
     listing(id: ID!): Listing!
+    listings(filter: ListingsFilter, limit: Int!, page: Int!): Listings!
   }
 
   type Mutation {
