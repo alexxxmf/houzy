@@ -120,7 +120,7 @@ export const viewerResolvers: IResolvers = {
       }
     },
   },
-  // const viewer = await authorize(db, req);
+
   Mutation: {
     logIn: async (
       _root: undefined,
