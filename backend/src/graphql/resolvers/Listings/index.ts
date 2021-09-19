@@ -2,7 +2,14 @@ import { IResolvers } from "apollo-server-express";
 import { ObjectId } from "mongodb";
 import { Booking, Context, Listing, User } from "../../../lib/types";
 import { authorize } from "../../../utils";
-import { ListingArgs, ListingBookingsArgs, ListingBookingsData } from "./types";
+import {
+  ListingArgs,
+  ListingBookingsArgs,
+  ListingBookingsData,
+  ListingsArgs,
+  ListingsData,
+  ListingsFilter,
+} from "./types";
 
 export const listingResolvers: IResolvers = {
   Query: {
@@ -22,6 +29,38 @@ export const listingResolvers: IResolvers = {
         listing.authorized = true;
       }
       return listing;
+    },
+    listings: async (
+      _,
+      { filter, page, limit }: ListingsArgs,
+      { db }: Context
+    ): Promise<ListingsData> => {
+      const data: ListingsData = {
+        total: 0,
+        result: [],
+      };
+
+      const listingsCursor = db.listings.find({});
+
+      listingsCursor.limit(limit);
+      listingsCursor.skip(page > 0 ? (page - 1) * limit : 0);
+
+      if (filter === ListingsFilter["PRICE_ASC"]) {
+        listingsCursor.sort({
+          price: 1,
+        });
+      }
+
+      if (filter === ListingsFilter["PRICE_DESC"]) {
+        listingsCursor.sort({
+          price: -1,
+        });
+      }
+
+      data.total = await listingsCursor.count();
+      data.result = await listingsCursor.toArray();
+
+      return data;
     },
   },
 
