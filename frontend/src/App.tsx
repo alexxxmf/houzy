@@ -45,9 +45,9 @@ const App = () => {
             logInData.logIn.token
           );
         } else {
-          // sessionStorage.removeItem(
-          //   process.env.REACT_APP_CSRF_TOKEN_KEY || "" || ""
-          // );
+          sessionStorage.removeItem(
+            process.env.REACT_APP_CSRF_TOKEN_KEY || "" || ""
+          );
         }
       }
     },
