@@ -1,5 +1,6 @@
 import { IResolvers } from "apollo-server-express";
 import { ObjectId } from "mongodb";
+import { Google } from "../../../lib/api";
 import { Booking, Context, Listing, User } from "../../../lib/types";
 import { authorize } from "../../../utils";
 import {
@@ -9,6 +10,7 @@ import {
   ListingsArgs,
   ListingsData,
   ListingsFilter,
+  ListingsQuery,
 } from "./types";
 
 export const listingResolvers: IResolvers = {
@@ -32,15 +34,35 @@ export const listingResolvers: IResolvers = {
     },
     listings: async (
       _,
-      { filter, page, limit }: ListingsArgs,
+      { location, filter, page, limit }: ListingsArgs,
       { db }: Context
     ): Promise<ListingsData> => {
+      const query: ListingsQuery = {};
       const data: ListingsData = {
         total: 0,
         result: [],
+        region: null,
       };
 
-      const listingsCursor = db.listings.find({});
+      if (location) {
+        const { country, admin, city } = await Google.geocode(location);
+
+        if (city) query.city = city;
+        if (admin) query.admin = admin;
+        if (country) {
+          query.country = country;
+        } else {
+          throw new Error("no country found");
+        }
+
+        const cityText = city ? `${city}, ` : "";
+        const adminText = admin ? `${admin}, ` : "";
+        const regionText = `${cityText}${adminText}${country}`;
+
+        data.region = regionText;
+      }
+
+      const listingsCursor = db.listings.find(query);
 
       listingsCursor.limit(limit);
       listingsCursor.skip(page > 0 ? (page - 1) * limit : 0);
