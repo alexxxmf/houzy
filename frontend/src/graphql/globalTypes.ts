@@ -12,6 +12,11 @@ export enum ListingType {
   HOUSE = "HOUSE",
 }
 
+export enum ListingsFilter {
+  PRICE_ASC = "PRICE_ASC",
+  PRICE_DESC = "PRICE_DESC",
+}
+
 export interface LogInInput {
   code: string;
 }
