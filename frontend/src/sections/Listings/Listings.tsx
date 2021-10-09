@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@apollo/client";
-import { Layout, List, Typography } from "antd";
+import { Affix, Layout, List, Typography } from "antd";
 import { Link, RouteComponentProps } from "react-router-dom";
 import {
   Listings as ListingsData,
@@ -9,6 +9,9 @@ import {
 import { QUERY_LISTINGS } from "../../graphql/queries/listings";
 import { ListingsFilter } from "../../graphql/globalTypes";
 import ListingCard from "../../components/ListingCard";
+import { ListingsFilters, ListingsSkeleton } from "./components";
+import { ListingsPagination } from "./components/ListingsPagination";
+import { ErrorBanner } from "../../components";
 
 const { Content } = Layout;
 
@@ -21,21 +24,52 @@ interface MatchParams {
 }
 
 export const Listings = ({ match }: RouteComponentProps<MatchParams>) => {
-  const { data } = useQuery<ListingsData, ListingsVariables>(QUERY_LISTINGS, {
-    variables: {
-      location: match.params.location,
-      filter: ListingsFilter.PRICE_ASC,
-      limit: PAGE_LIMIT,
-      page: 1,
-    },
-  });
+  const [filter, setFilter] = useState(ListingsFilter.PRICE_ASC);
+  const [page, setPage] = useState(1);
+  const { data, loading, error } = useQuery<ListingsData, ListingsVariables>(
+    QUERY_LISTINGS,
+    {
+      variables: {
+        location: match.params.location,
+        filter,
+        limit: PAGE_LIMIT,
+        page,
+      },
+    }
+  );
 
   const listings = data ? data.listings : null;
   const listingsRegion = listings ? listings.region : null;
 
+  if (loading) {
+    return (
+      <Content className="listings">
+        <ListingsSkeleton />
+      </Content>
+    );
+  }
+
+  if (error) {
+    return (
+      <Content className="listings">
+        <ErrorBanner description="We either couldn't find anything matching your search or have encountered an error. If you're searching for a unique location, try searching again with more common keywords." />
+        <ListingsSkeleton />
+      </Content>
+    );
+  }
+
   const listingSectionElement =
     listings && listings.result.length ? (
       <div>
+        <Affix offsetTop={64}>
+          <ListingsPagination
+            total={listings.total}
+            limit={PAGE_LIMIT}
+            page={page}
+            setPage={setPage}
+          />
+          <ListingsFilters filter={filter} setFilter={setFilter} />
+        </Affix>
         <List
           grid={{
             gutter: 8,
