@@ -17,19 +17,20 @@ const { Content } = Layout;
 
 const { Title, Paragraph, Text } = Typography;
 
-const PAGE_LIMIT = 8;
+const PAGE_LIMIT = 4;
 
 interface MatchParams {
   location: string;
 }
 
 export const Listings = ({ match }: RouteComponentProps<MatchParams>) => {
-  const locationRef = useRef();
+  const locationRef = useRef(match.params.location);
   const [filter, setFilter] = useState(ListingsFilter.PRICE_ASC);
   const [page, setPage] = useState(1);
   const { data, loading, error } = useQuery<ListingsData, ListingsVariables>(
     QUERY_LISTINGS,
     {
+      skip: locationRef.current !== match.params.location && page !== 1,
       variables: {
         location: match.params.location,
         filter,
@@ -41,6 +42,7 @@ export const Listings = ({ match }: RouteComponentProps<MatchParams>) => {
 
   useEffect(() => {
     setPage(1);
+    locationRef.current = match.params.location;
   }, [match.params.location]);
 
   const listings = data ? data.listings : null;
