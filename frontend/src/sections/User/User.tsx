@@ -44,6 +44,13 @@ export const User = ({ viewer, match }: IProps) => {
     );
   }
 
+  const stripeError = new URL(window.location.href).searchParams.get(
+    "stripe_error"
+  );
+  const stripeErrorBanner = stripeError ? (
+    <ErrorBanner description="We had an issue connecting with Stripe. Please try again soon!" />
+  ) : null;
+
   if (userError) {
     return (
       <Content className="user">
@@ -60,6 +67,7 @@ export const User = ({ viewer, match }: IProps) => {
 
   return (
     <Content className="user">
+      {stripeErrorBanner}
       <Row gutter={12} justify="space-between">
         <Col xs={24}>
           {user ? (

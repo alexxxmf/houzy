@@ -17,6 +17,10 @@ export enum ListingsFilter {
   PRICE_DESC = "PRICE_DESC",
 }
 
+export interface ConnectStripeInput {
+  code: string;
+}
+
 export interface LogInInput {
   code: string;
 }

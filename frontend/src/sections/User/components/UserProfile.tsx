@@ -8,7 +8,12 @@ interface IProps {
   viewerIsUser: boolean;
 }
 
+const stripeOauthUrl = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${process.env.REACT_APP_STRIPE_CLIENT_ID}&scope=read_write`;
+
 const UserProfile = ({ user, viewerIsUser }: IProps) => {
+  const redirectToStripe = () => {
+    window.location.href = stripeOauthUrl;
+  };
   const AdditionalSection = viewerIsUser ? (
     <>
       <Divider />
@@ -18,7 +23,11 @@ const UserProfile = ({ user, viewerIsUser }: IProps) => {
           Interested in becoming a Houzy host? Register with your Stripe
           account!
         </Typography.Paragraph>
-        <Button type="primary" className="user-profile__details-cta">
+        <Button
+          type="primary"
+          className="user-profile__details-cta"
+          onClick={redirectToStripe}
+        >
           Connect with Stripe
         </Button>
         <Typography.Paragraph type="secondary">
