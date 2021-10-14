@@ -20,6 +20,7 @@ import {
 } from "./graphql/mutations/__generated__/logIn";
 import { AppHeaderSkeleton, ErrorBanner } from "./components";
 import { Spin } from "antd";
+import { Stripe } from "./sections/Stripe/Stripe";
 
 const initialViewer: Viewer = {
   id: null,
@@ -94,13 +95,22 @@ const App = () => {
           <Route
             exact
             path="/user/:id"
-            render={(props) => <User {...props} viewer={viewer} />}
+            render={(props) => (
+              <User {...props} viewer={viewer} setViewer={setViewer} />
+            )}
           />
           <Route
             exact
             path="/login"
             render={(props) => (
               <Login {...props} setViewer={setViewer} viewer={viewer} />
+            )}
+          />
+          <Route
+            exact
+            path="/stripe"
+            render={(props) => (
+              <Stripe {...props} setViewer={setViewer} viewer={viewer} />
             )}
           />
           <Route component={NotFound} />

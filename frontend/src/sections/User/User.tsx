@@ -17,13 +17,14 @@ import UserBookings from "./components/UserBookings";
 
 type IProps = RouteComponentProps<{ id: string }> & {
   viewer: Viewer;
+  setViewer: (viewer: Viewer) => void;
 };
 
 const { Content } = Layout;
 
 const PAGE_LIMIT = 4;
 
-export const User = ({ viewer, match }: IProps) => {
+export const User = ({ viewer, match, setViewer }: IProps) => {
   const userId = match.params.id;
   const [bookingsPage, setBookingsPage] = useState(1);
   const [listingsPage, setListingsPage] = useState(1);
@@ -32,9 +33,14 @@ export const User = ({ viewer, match }: IProps) => {
     data: userData,
     loading: userLoading,
     error: userError,
+    refetch,
   } = useQuery<IUserData, IUserVariables>(QUERY_USER, {
     variables: { id: userId, bookingsPage, listingsPage, limit: PAGE_LIMIT },
   });
+
+  const handleUserRefetch = async () => {
+    await refetch();
+  };
 
   if (userLoading) {
     return (
@@ -71,7 +77,13 @@ export const User = ({ viewer, match }: IProps) => {
       <Row gutter={12} justify="space-between">
         <Col xs={24}>
           {user ? (
-            <UserProfile user={user} viewerIsUser={viewerIsUser} />
+            <UserProfile
+              user={user}
+              viewerIsUser={viewerIsUser}
+              viewer={viewer}
+              setViewer={setViewer}
+              handleUserRefetch={handleUserRefetch}
+            />
           ) : null}
         </Col>
         <Col xs={24}>
