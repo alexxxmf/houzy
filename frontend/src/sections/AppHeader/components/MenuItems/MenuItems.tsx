@@ -69,9 +69,8 @@ export const MenuItems = ({ viewer, setViewer }: IProps) => {
     <Menu mode="horizontal" selectable={false} className="menu">
       <Item key="/host">
         <Link to="/host">
-          <Icon viewBox="0 0 1024 1024" type="home">
-            Host
-          </Icon>
+          <Icon type="home" />
+          Host
         </Link>
       </Item>
       {subMenuLogin}

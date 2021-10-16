@@ -85,7 +85,11 @@ const App = () => {
         <AppHeader setViewer={setViewer} viewer={viewer} />
         <Switch>
           <Route exact path="/" component={Home} />
-          <Route exact path="/host" component={Host} />
+          <Route
+            exact
+            path="/host"
+            render={(props) => <Host {...props} viewer={viewer} />}
+          />
           <Route exact path="/listings/:location?" component={Listings} />
           <Route
             exact
