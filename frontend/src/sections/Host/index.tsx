@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Layout,
   Typography,
@@ -11,8 +11,15 @@ import {
 } from "antd";
 import { Viewer } from "../../types";
 import { Link } from "react-router-dom";
-import { DatabaseFilled, HomeFilled } from "@ant-design/icons";
+import {
+  DatabaseFilled,
+  HomeFilled,
+  LoadingOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { ListingType } from "../../graphql/globalTypes";
+import { displayErrorMessage } from "../../utils";
+import { UploadChangeParam } from "antd/lib/upload";
 
 const { Content } = Layout;
 const { Text, Title } = Typography;
@@ -22,8 +29,55 @@ interface Props {
 }
 
 export const Host = ({ viewer }: Props) => {
-  const beforeUpload = () => {};
-  const handleImageUpload = () => {};
+  const [imageBeingUploaded, setImageBeingUploaded] = useState(false);
+  const [imageBinary, setImageBinary] = useState<string | null>(null);
+  const beforeImageUpload = (file: File | Blob) => {
+    const fileIsValidImage =
+      file.type === "image/jpeg" || file.type === "image/png";
+    const fileIsValidSize = file.size / 1024 / 1024 < 1;
+
+    if (!fileIsValidImage) {
+      displayErrorMessage("You're only able to upload valid JPG or PNG files!");
+      return false;
+    }
+
+    if (!fileIsValidSize) {
+      displayErrorMessage(
+        "You're only able to upload valid image files of under 1MB in size!"
+      );
+      return false;
+    }
+
+    return fileIsValidImage && fileIsValidSize;
+  };
+
+  const convertFileToBinary = (
+    file: File | Blob,
+    callback: (imageBinary: string) => void
+  ) => {
+    const filereader = new FileReader();
+    filereader.readAsBinaryString(file);
+
+    filereader.onload = () => {
+      callback(filereader.result as string);
+    };
+  };
+  const handleImageUpload = (info: UploadChangeParam) => {
+    const { file } = info;
+
+    if (file.status === "uploading") {
+      console.log("file.status", file.status);
+      setImageBeingUploaded(true);
+      return;
+    }
+
+    if (file.status === "done" && file.originFileObj) {
+      convertFileToBinary(file.originFileObj, (imageBinary) => {
+        setImageBinary(imageBinary);
+        setImageBeingUploaded(false);
+      });
+    }
+  };
   const handleHostListing = () => {};
 
   if (!viewer.id || !viewer.hasWallet) {
@@ -84,9 +138,18 @@ export const Host = ({ viewer }: Props) => {
               name="image"
               listType="picture-card"
               action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-              beforeUpload={beforeUpload}
+              beforeUpload={beforeImageUpload}
               onChange={handleImageUpload}
-            ></Upload>
+            >
+              {imageBinary ? (
+                <img src={imageBinary} alt="Listing" />
+              ) : (
+                <div>
+                  {imageBeingUploaded ? <LoadingOutlined /> : <PlusOutlined />}
+                  <div className="ant-upload-text">Upload</div>
+                </div>
+              )}
+            </Upload>
           </div>
         </Form.Item>
       </Form>
