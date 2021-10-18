@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import {
   Layout,
   Typography,
@@ -8,6 +8,7 @@ import {
   Select,
   Upload,
   Radio,
+  InputNumber,
 } from "antd";
 import { Viewer } from "../../types";
 import { Link } from "react-router-dom";
@@ -66,7 +67,6 @@ export const Host = ({ viewer }: Props) => {
     const { file } = info;
 
     if (file.status === "uploading") {
-      console.log("file.status", file.status);
       setImageBeingUploaded(true);
       return;
     }
@@ -78,7 +78,9 @@ export const Host = ({ viewer }: Props) => {
       });
     }
   };
-  const handleHostListing = () => {};
+  const handleHostListing = (values: any) => {
+    console.log("values", values);
+  };
 
   if (!viewer.id || !viewer.hasWallet) {
     return (
@@ -111,13 +113,12 @@ export const Host = ({ viewer }: Props) => {
             about your listing.
           </Text>
         </div>
-        <Form.Item label="Title">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Description">
-          <Input.TextArea />
-        </Form.Item>
-        <Form.Item label="Home Type">
+
+        <Form.Item
+          label="Home Type"
+          name="homeType"
+          rules={[{ required: true, message: "Please select a home type!" }]}
+        >
           <Radio.Group>
             <Radio.Button value={ListingType.HOUSE}>
               <HomeFilled style={{ color: "#1890ff" }} />
@@ -129,9 +130,110 @@ export const Host = ({ viewer }: Props) => {
             </Radio.Button>
           </Radio.Group>
         </Form.Item>
+
+        <Form.Item
+          label="Max # of Guests"
+          name="numGuests"
+          rules={[
+            { required: true, message: "Please enter a max number of guests!" },
+          ]}
+        >
+          <InputNumber min={1} placeholder="4" />
+        </Form.Item>
+
+        <Form.Item
+          label="Title"
+          name="title"
+          extra="Max character count of 45"
+          rules={[
+            {
+              required: true,
+              message: "Please enter a title for your listing!",
+            },
+          ]}
+        >
+          <Input maxLength={45} placeholder="Marylin Manson's Mansion" />
+        </Form.Item>
+        <Form.Item
+          label="Description"
+          name="description"
+          rules={[
+            {
+              required: true,
+              message: "Please enter a description for your listing!",
+            },
+          ]}
+          extra="Max character count of 400"
+        >
+          <Input.TextArea
+            rows={3}
+            maxLength={400}
+            placeholder={"Modern clean but with a crazy touch"}
+          />
+        </Form.Item>
+
+        <Form.Item
+          label="Address"
+          name="address"
+          rules={[
+            {
+              required: true,
+              message: "Please enter a address for your listing!",
+            },
+          ]}
+        >
+          <Input placeholder="251 North Bristol Avenue" />
+        </Form.Item>
+
+        <Form.Item
+          label="City/Town"
+          name="city"
+          rules={[
+            {
+              required: true,
+              message: "Please enter a city (or region) for your listing!",
+            },
+          ]}
+        >
+          <Input placeholder="Los Angeles" />
+        </Form.Item>
+
+        <Form.Item
+          label="State/Province"
+          name="state"
+          rules={[
+            {
+              required: true,
+              message: "Please enter a state (or province) for your listing!",
+            },
+          ]}
+        >
+          <Input placeholder="California" />
+        </Form.Item>
+
+        <Form.Item
+          label="Zip/Postal Code"
+          name="postalCode"
+          rules={[
+            {
+              required: true,
+              message: "Please enter a zip (or postal) code for your listing!",
+            },
+          ]}
+        >
+          <Input placeholder="Please enter a zip code for your listing!" />
+        </Form.Item>
+
         <Form.Item
           label="Image"
+          name="image"
           extra="Images have to be under 1MB in size and of type JPG or PNG"
+          rules={[
+            {
+              required: true,
+              message: "Please enter provide an image for your listing!",
+            },
+          ]}
         >
           <div className="host__form-image-upload">
             <Upload
@@ -151,6 +253,25 @@ export const Host = ({ viewer }: Props) => {
               )}
             </Upload>
           </div>
+        </Form.Item>
+
+        <Form.Item
+          label="Price"
+          extra="All prices in $USD/day"
+          name="price"
+          rules={[
+            {
+              required: true,
+              message: "Please enter a price for your listing!",
+            },
+          ]}
+        >
+          <InputNumber min={0} placeholder="120" />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            Submit
+          </Button>
         </Form.Item>
       </Form>
     </Content>
