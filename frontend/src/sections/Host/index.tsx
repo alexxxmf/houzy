@@ -11,7 +11,7 @@ import {
   InputNumber,
 } from "antd";
 import { Viewer } from "../../types";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import {
   DatabaseFilled,
   HomeFilled,
@@ -19,8 +19,15 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { ListingType } from "../../graphql/globalTypes";
-import { displayErrorMessage } from "../../utils";
+import { displayErrorMessage, displaySuccessNotification } from "../../utils";
 import { UploadChangeParam } from "antd/lib/upload";
+import { useMutation } from "@apollo/client";
+import { MUTATION_HOST_LISTING } from "../../graphql/mutations/hostListing";
+import {
+  hostListing as HostListingData,
+  hostListingVariables as HostListingVariables,
+} from "../../graphql/mutations/__generated__/hostListing";
+import { useScrollToTop } from "../../hooks/useScrollToTop";
 
 const { Content } = Layout;
 const { Text, Title } = Typography;
@@ -32,6 +39,23 @@ interface Props {
 export const Host = ({ viewer }: Props) => {
   const [imageBeingUploaded, setImageBeingUploaded] = useState(false);
   const [imageBinary, setImageBinary] = useState<string | null>(null);
+
+  const [hostListing, { loading, data }] = useMutation<
+    HostListingData,
+    HostListingVariables
+  >(MUTATION_HOST_LISTING, {
+    onCompleted: () => {
+      displaySuccessNotification("You've successfully created your listing!");
+    },
+    onError: () => {
+      displayErrorMessage(
+        "Sorry! We weren't able to create your listing. Please try again later."
+      );
+    },
+  });
+
+  useScrollToTop();
+
   const beforeImageUpload = (file: File | Blob) => {
     const fileIsValidImage =
       file.type === "image/jpeg" || file.type === "image/png";
@@ -79,7 +103,23 @@ export const Host = ({ viewer }: Props) => {
     }
   };
   const handleHostListing = (values: any) => {
-    console.log("values", values);
+    const fullAddress = `${values.address}, ${values.city}, ${values.state}, ${values.postalCode}`;
+    const input = {
+      ...values,
+      address: fullAddress,
+      image: imageBinary,
+      price: values.price * 100,
+    };
+
+    delete input.city;
+    delete input.state;
+    delete input.postalCode;
+
+    hostListing({
+      variables: {
+        input,
+      },
+    });
   };
 
   if (!viewer.id || !viewer.hasWallet) {
@@ -96,6 +136,23 @@ export const Host = ({ viewer }: Props) => {
             <Link to="/login">/login</Link> page and connect with Stripe shortly
             after.
           </Text>
+        </div>
+      </Content>
+    );
+  }
+
+  if (data && data.hostListing) {
+    return <Redirect to={`/listing/${data.hostListing.id}`} />;
+  }
+
+  if (loading) {
+    return (
+      <Content className="host-content">
+        <div className="host__form-header">
+          <Title level={3} className="host__form-title">
+            Please wait!
+          </Title>
+          <Text type="secondary">We're creating your listing now.</Text>
         </div>
       </Content>
     );
