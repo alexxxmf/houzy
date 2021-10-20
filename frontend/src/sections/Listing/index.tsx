@@ -6,7 +6,7 @@ import {
   ListingVariables as IListingVariables,
 } from "../../graphql/queries/__generated__/Listing";
 import { RouteComponentProps } from "react-router-dom";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { Viewer } from "../../types";
 import { Col, Layout, Row } from "antd";
 import { PageSkeleton } from "../../components/PageSkeleton";

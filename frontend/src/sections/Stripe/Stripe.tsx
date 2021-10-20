@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useMutation } from "@apollo/client";
-import { Layout, message, Spin } from "antd";
+import { Layout, Spin } from "antd";
 import {
   connectStripe as ConnectStripeData,
   connectStripeVariables as ConnectStripeVariables,

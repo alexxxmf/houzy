@@ -1,6 +1,5 @@
-import Icon from "@ant-design/icons";
-import { Avatar, Divider, List, Tag, Typography } from "antd";
 import React from "react";
+import { Avatar, Divider, List, Typography } from "antd";
 import { Link } from "react-router-dom";
 import {
   Listing_listing_bookings as IListingBooking,

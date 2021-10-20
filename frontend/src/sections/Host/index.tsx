@@ -1,11 +1,10 @@
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import {
   Layout,
   Typography,
   Form,
   Input,
   Button,
-  Select,
   Upload,
   Radio,
   InputNumber,
@@ -54,6 +53,9 @@ export const Host = ({ viewer }: Props) => {
     },
   });
 
+  console.log("imageBeingUploaded", imageBeingUploaded);
+  console.log("imageBinary", !!imageBinary);
+
   useScrollToTop();
 
   const beforeImageUpload = (file: File | Blob) => {
@@ -94,6 +96,12 @@ export const Host = ({ viewer }: Props) => {
       setImageBeingUploaded(true);
       return;
     }
+
+    if (file.status === "error") {
+      console.log(file);
+    }
+
+    console.log("file.status", file.status);
 
     if (file.status === "done" && file.originFileObj) {
       convertFileToBinary(file.originFileObj, (imageBinary) => {
@@ -296,7 +304,15 @@ export const Host = ({ viewer }: Props) => {
             <Upload
               name="image"
               listType="picture-card"
-              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              // These two things are just a hacky trick to bypass upload's component
+              // default behavior of making a request on file.status == done
+              // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              customRequest={({ file, onSuccess }) => {
+                setTimeout(() => {
+                  //@ts-ignore
+                  onSuccess("ok");
+                }, 0);
+              }}
               beforeUpload={beforeImageUpload}
               onChange={handleImageUpload}
             >

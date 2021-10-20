@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Avatar, Divider, Typography, Button, Tag } from "antd";
 
 import { User_user as IUser } from "../../../graphql/queries/__generated__/User";
-import Paragraph from "antd/lib/skeleton/Paragraph";
 import {
   displayErrorMessage,
   displaySuccessNotification,
