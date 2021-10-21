@@ -78,12 +78,12 @@ export const Host = ({ viewer }: Props) => {
     return fileIsValidImage && fileIsValidSize;
   };
 
-  const convertFileToBinary = (
+  const convertFileToBase64 = (
     file: File | Blob,
     callback: (imageBinary: string) => void
   ) => {
     const filereader = new FileReader();
-    filereader.readAsBinaryString(file);
+    filereader.readAsDataURL(file);
 
     filereader.onload = () => {
       callback(filereader.result as string);
@@ -104,8 +104,8 @@ export const Host = ({ viewer }: Props) => {
     console.log("file.status", file.status);
 
     if (file.status === "done" && file.originFileObj) {
-      convertFileToBinary(file.originFileObj, (imageBinary) => {
-        setImageBinary(imageBinary);
+      convertFileToBase64(file.originFileObj, (imageBase64) => {
+        setImageBinary(imageBase64);
         setImageBeingUploaded(false);
       });
     }
@@ -304,6 +304,7 @@ export const Host = ({ viewer }: Props) => {
             <Upload
               name="image"
               listType="picture-card"
+              showUploadList={false}
               // These two things are just a hacky trick to bypass upload's component
               // default behavior of making a request on file.status == done
               // action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
@@ -317,7 +318,11 @@ export const Host = ({ viewer }: Props) => {
               onChange={handleImageUpload}
             >
               {imageBinary ? (
-                <img src={imageBinary} alt="Listing" />
+                <img
+                  src={imageBinary}
+                  alt="Listing"
+                  style={{ width: "100%", overflowY: "clip" }}
+                />
               ) : (
                 <div>
                   {imageBeingUploaded ? <LoadingOutlined /> : <PlusOutlined />}
