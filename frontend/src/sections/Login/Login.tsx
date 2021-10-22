@@ -47,10 +47,6 @@ export const Login = ({ setViewer, viewer }: ILoginProps) => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log("check|useEffect|logInData", logInData);
-  }, [logInData]);
-
   const onClickHandler = async () => {
     try {
       const {

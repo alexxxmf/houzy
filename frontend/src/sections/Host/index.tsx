@@ -39,7 +39,7 @@ export const Host = ({ viewer }: Props) => {
   const [imageBeingUploaded, setImageBeingUploaded] = useState(false);
   const [imageBinary, setImageBinary] = useState<string | null>(null);
 
-  const [hostListing, { loading, data }] = useMutation<
+  const [hostListing, { loading, data, error }] = useMutation<
     HostListingData,
     HostListingVariables
   >(MUTATION_HOST_LISTING, {
@@ -52,9 +52,6 @@ export const Host = ({ viewer }: Props) => {
       );
     },
   });
-
-  console.log("imageBeingUploaded", imageBeingUploaded);
-  console.log("imageBinary", !!imageBinary);
 
   useScrollToTop();
 
@@ -96,12 +93,6 @@ export const Host = ({ viewer }: Props) => {
       setImageBeingUploaded(true);
       return;
     }
-
-    if (file.status === "error") {
-      console.log(file);
-    }
-
-    console.log("file.status", file.status);
 
     if (file.status === "done" && file.originFileObj) {
       convertFileToBase64(file.originFileObj, (imageBase64) => {
@@ -149,6 +140,10 @@ export const Host = ({ viewer }: Props) => {
     );
   }
 
+  if (error) {
+    console.log("error", error);
+  }
+
   if (data && data.hostListing) {
     return <Redirect to={`/listing/${data.hostListing.id}`} />;
   }
@@ -181,7 +176,7 @@ export const Host = ({ viewer }: Props) => {
 
         <Form.Item
           label="Home Type"
-          name="homeType"
+          name="type"
           rules={[{ required: true, message: "Please select a home type!" }]}
         >
           <Radio.Group>
@@ -198,7 +193,7 @@ export const Host = ({ viewer }: Props) => {
 
         <Form.Item
           label="Max # of Guests"
-          name="numGuests"
+          name="numOfGuests"
           rules={[
             { required: true, message: "Please enter a max number of guests!" },
           ]}

@@ -125,6 +125,7 @@ export const listingResolvers: IResolvers = {
       if (!viewer) {
         throw new Error("viewer cannot be found");
       }
+
       const { country, admin, city } = await Google.geocode(input.address);
 
       if (!country || !admin || !city) {

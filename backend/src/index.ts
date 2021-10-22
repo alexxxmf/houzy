@@ -10,6 +10,7 @@ import { resolvers, typeDefs } from "./graphql";
 const mount = async (app: Application) => {
   const db = await connectDatabase();
 
+  app.use(express.json({ limit: "5mb" }));
   app.use(cookieParser(process.env.SECRET));
 
   const server = new ApolloServer({
