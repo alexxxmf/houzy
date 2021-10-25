@@ -144,5 +144,8 @@ export const bookingResolvers: IResolvers = {
         _id: booking.listing,
       });
     },
+    tenant: (booking: Booking, _, { db }: Context) => {
+      return db.users.findOne({ _id: booking.tenant });
+    },
   },
 };
