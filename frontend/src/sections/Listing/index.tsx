@@ -81,6 +81,8 @@ export const Listing = ({ match, viewer }: IProps) => {
               checkInDate={checkInDate}
               setCheckInDate={setCheckInDate}
               viewer={viewer}
+              host={listing.host}
+              bookingsIndex={listing.bookingsIndex}
             />
           ) : null}
         </Col>

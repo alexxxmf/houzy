@@ -5,6 +5,7 @@ import { DatePicker } from "../../../../components";
 import { displayErrorMessage, priceFormatter } from "../../../../utils";
 import { Viewer } from "../../../../types";
 import { Listing_listing as Listing } from "../../../../graphql/queries/__generated__/Listing";
+import { BookingsIndex } from "./types";
 
 interface IProps {
   price: number;
@@ -14,6 +15,7 @@ interface IProps {
   setCheckInDate: (date: Dayjs | null) => void;
   viewer: Viewer;
   host: Listing["host"];
+  bookingsIndex: Listing["bookingsIndex"];
 }
 
 const ListingCreateBooking = ({
@@ -24,12 +26,27 @@ const ListingCreateBooking = ({
   setCheckOutDate,
   viewer,
   host,
+  bookingsIndex,
 }: IProps) => {
+  const bookingsIndexJSON: BookingsIndex = JSON.parse(bookingsIndex);
+
+  const dateIsBooked = (currentDate?: Dayjs) => {
+    const year = dayjs(currentDate).year();
+    const month = dayjs(currentDate).month();
+    const day = dayjs(currentDate).date();
+
+    if (bookingsIndexJSON[year] && bookingsIndexJSON[year][month]) {
+      return Boolean(bookingsIndexJSON[year][month][day]);
+    } else {
+      return false;
+    }
+  };
+
   const disabledDate = (currentDate?: Dayjs) => {
     if (currentDate) {
       const dateIsBeforeEndOfDay = currentDate.isBefore(dayjs().endOf("day"));
 
-      return dateIsBeforeEndOfDay;
+      return dateIsBeforeEndOfDay || dateIsBooked(currentDate);
     } else {
       return false;
     }
@@ -39,6 +56,26 @@ const ListingCreateBooking = ({
       if (selectedCheckOutDate?.isBefore(checkInDate, "days")) {
         return displayErrorMessage(
           `You can't book date of check out to be prior to check in!`
+        );
+      }
+
+      let dateCursor = checkInDate;
+
+      while (dayjs(dateCursor).isBefore(selectedCheckOutDate)) {
+        dateCursor = dayjs(dateCursor).add(1, "days");
+
+        const year = dayjs(dateCursor).year();
+        const month = dayjs(dateCursor).month();
+        const day = dayjs(dateCursor).date();
+
+        if (
+          bookingsIndexJSON[year] &&
+          bookingsIndexJSON[year][month] &&
+          bookingsIndexJSON[year][month][day]
+        ) {
+        }
+        return displayErrorMessage(
+          "You can't book a period of time that overlaps existing bookings. Please try again!"
         );
       }
     }
