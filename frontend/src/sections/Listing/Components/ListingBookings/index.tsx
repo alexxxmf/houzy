@@ -5,15 +5,23 @@ import {
   Listing_listing_bookings as IListingBooking,
   Listing_listing_bookings_result as listingBooking,
 } from "../../../../graphql/queries/__generated__/Listing";
+import { Viewer } from "../../../../types";
 
 interface IProps {
   listingBookings: IListingBooking;
   page: number;
   limit: number;
   setPage: (pageNumber: number) => void;
+  viewer: Viewer;
 }
 
-const ListingBookings = ({ listingBookings, page, limit, setPage }: IProps) => {
+const ListingBookings = ({
+  listingBookings,
+  page,
+  limit,
+  setPage,
+  viewer,
+}: IProps) => {
   const total = listingBookings ? listingBookings.total : null;
   const result = listingBookings ? listingBookings.result : null;
 

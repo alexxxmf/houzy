@@ -3,6 +3,8 @@ import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "../../../../components";
 import { displayErrorMessage, priceFormatter } from "../../../../utils";
+import { Viewer } from "../../../../types";
+import { Listing_listing as Listing } from "../../../../graphql/queries/__generated__/Listing";
 
 interface IProps {
   price: number;
@@ -10,6 +12,8 @@ interface IProps {
   setCheckOutDate: (date: Dayjs | null) => void;
   checkInDate: Dayjs | null;
   setCheckInDate: (date: Dayjs | null) => void;
+  viewer: Viewer;
+  host: Listing["host"];
 }
 
 const ListingCreateBooking = ({
@@ -18,6 +22,8 @@ const ListingCreateBooking = ({
   setCheckInDate,
   checkOutDate,
   setCheckOutDate,
+  viewer,
+  host,
 }: IProps) => {
   const disabledDate = (currentDate?: Dayjs) => {
     if (currentDate) {
@@ -39,8 +45,20 @@ const ListingCreateBooking = ({
     setCheckOutDate(selectedCheckOutDate);
   };
 
-  const checkOutInputDisabled = !checkInDate;
-  const buttonDisabled = !checkInDate || !checkOutDate;
+  const viewerIsHost = viewer.id === host.id;
+  const checkInInputDisabled = !viewer.id || viewerIsHost || !host.hasWallet;
+  const checkOutInputDisabled = !checkInDate || checkInInputDisabled;
+  const buttonDisabled = !checkInDate || !checkOutDate || checkInInputDisabled;
+
+  let buttonMessage = "You won't be charged yet";
+
+  if (!viewer.id) {
+    buttonMessage = "You have to be signed in to book a listing";
+  } else if (viewerIsHost) {
+    buttonMessage = "You cannot book your own listing";
+  } else if (!host.hasWallet) {
+    buttonMessage = "The host has disconnected from Stripe";
+  }
 
   return (
     <div className="listing-booking">
@@ -58,6 +76,7 @@ const ListingCreateBooking = ({
             <DatePicker
               onChange={setCheckInDate}
               value={checkInDate}
+              disabled={checkInInputDisabled}
               format={"YYYY/MM/DD"}
               showToday={false}
               disabledDate={disabledDate}
@@ -84,6 +103,9 @@ const ListingCreateBooking = ({
         >
           Request to book!
         </Button>
+        <Typography.Text type="secondary" mark>
+          {buttonMessage}
+        </Typography.Text>
       </Card>
     </div>
   );

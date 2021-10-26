@@ -68,6 +68,7 @@ export const Listing = ({ match, viewer }: IProps) => {
               limit={PAGE_LIMIT}
               page={bookingsPage}
               setPage={setBookingsPage}
+              viewer={viewer}
             />
           ) : null}
         </Col>
@@ -79,6 +80,7 @@ export const Listing = ({ match, viewer }: IProps) => {
               setCheckOutDate={setCheckOutDate}
               checkInDate={checkInDate}
               setCheckInDate={setCheckInDate}
+              viewer={viewer}
             />
           ) : null}
         </Col>
