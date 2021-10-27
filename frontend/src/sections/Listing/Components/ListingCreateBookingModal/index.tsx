@@ -24,8 +24,6 @@ export const ListingCreateBookingModal = ({
 }: Props) => {
   const daysBooked = checkOutDate.diff(checkInDate, "days") + 1;
   const listingPrice = price * daysBooked;
-  const houzyFee = 0.05 * listingPrice;
-  const totalPrice = listingPrice + houzyFee;
 
   return (
     <Modal
@@ -60,14 +58,10 @@ export const ListingCreateBookingModal = ({
         <div className="listing-booking-modal__charge-summary">
           <Paragraph>
             {priceFormatter(price)} * {daysBooked} days
-            <Text strong>{priceFormatter(price)}</Text>
+            <Text strong>{priceFormatter(listingPrice)}</Text>
           </Paragraph>
-          <Paragraph>
-            Houzy Fee <sub>~ 5%</sub>
-            <Text strong>{priceFormatter(houzyFee)}</Text>
-          </Paragraph>
-          <Paragraph>
-            Total = <Text strong>{priceFormatter(totalPrice)}</Text>
+          <Paragraph className="listing-booking-modal__charge-summary-total">
+            Total = <Text strong>{priceFormatter(listingPrice)}</Text>
           </Paragraph>
         </div>
 
