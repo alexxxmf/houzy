@@ -14,6 +14,7 @@ import { ErrorBanner } from "../../components";
 import ListingDetails from "./Components/ListingDetails";
 import ListingBookings from "./Components/ListingBookings";
 import ListingCreateBooking from "./Components/ListingCreateBooking";
+import { ListingCreateBookingModal } from "./Components/ListingCreateBookingModal";
 
 const PAGE_LIMIT = 4;
 
@@ -28,6 +29,7 @@ export const Listing = ({ match, viewer }: IProps) => {
   const [bookingsPage, setBookingsPage] = useState(1);
   const [checkInDate, setCheckInDate] = useState<Dayjs | null>(null);
   const [checkOutDate, setCheckOutDate] = useState<Dayjs | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const {
     data: listingData,
@@ -57,6 +59,17 @@ export const Listing = ({ match, viewer }: IProps) => {
   const listing = listingData ? listingData.listing : null;
   const listingBookings = listing ? listing.bookings : null;
 
+  const ListingCreateBookingModalElement =
+    listing && checkInDate && checkOutDate ? (
+      <ListingCreateBookingModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        price={listing?.price}
+        checkInDate={checkInDate}
+        checkOutDate={checkOutDate}
+      />
+    ) : null;
+
   return (
     <Layout.Content className="listing">
       <Row gutter={24} justify="space-between">
@@ -83,10 +96,12 @@ export const Listing = ({ match, viewer }: IProps) => {
               viewer={viewer}
               host={listing.host}
               bookingsIndex={listing.bookingsIndex}
+              setModalVisible={setModalVisible}
             />
           ) : null}
         </Col>
       </Row>
+      {ListingCreateBookingModalElement}
     </Layout.Content>
   );
 };

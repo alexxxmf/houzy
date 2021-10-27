@@ -16,6 +16,7 @@ interface IProps {
   viewer: Viewer;
   host: Listing["host"];
   bookingsIndex: Listing["bookingsIndex"];
+  setModalVisible: (modalVisible: boolean) => void;
 }
 
 const ListingCreateBooking = ({
@@ -27,6 +28,7 @@ const ListingCreateBooking = ({
   viewer,
   host,
   bookingsIndex,
+  setModalVisible,
 }: IProps) => {
   const bookingsIndexJSON: BookingsIndex = JSON.parse(bookingsIndex);
 
@@ -137,6 +139,9 @@ const ListingCreateBooking = ({
           size="large"
           type="primary"
           className="listing-booking__card-cta"
+          onClick={() => {
+            setModalVisible(true);
+          }}
         >
           Request to book!
         </Button>
