@@ -2,6 +2,11 @@ import React from "react";
 import { Modal, Button, Divider, Typography } from "antd";
 import { Dayjs } from "dayjs";
 import { KeyOutlined } from "@ant-design/icons";
+import {
+  CardElement,
+  injectStripe,
+  ReactStripeElements,
+} from "react-stripe-elements";
 import dayjs from "rc-picker/node_modules/dayjs";
 import { priceFormatter } from "../../../../utils";
 
@@ -21,9 +26,18 @@ export const ListingCreateBookingModal = ({
   price,
   checkInDate,
   checkOutDate,
-}: Props) => {
+  stripe,
+}: Props & ReactStripeElements.InjectedStripeProps) => {
   const daysBooked = checkOutDate.diff(checkInDate, "days") + 1;
   const listingPrice = price * daysBooked;
+
+  const handleCreateBooking = async () => {
+    if (!stripe) {
+      return;
+    }
+
+    const { token: stripeToken } = await stripe.createToken();
+  };
 
   return (
     <Modal
@@ -68,6 +82,10 @@ export const ListingCreateBookingModal = ({
         <Divider />
 
         <div className="listing-booking-modal__stripe-card-section">
+          <CardElement
+            hidePostalCode
+            className="listing-booking-modal__stripe-card"
+          />
           <Button
             size="large"
             type="primary"
@@ -80,3 +98,7 @@ export const ListingCreateBookingModal = ({
     </Modal>
   );
 };
+
+export const WrappedListingCreateBookingModal = injectStripe(
+  ListingCreateBookingModal
+);
