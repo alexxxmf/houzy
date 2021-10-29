@@ -9,6 +9,12 @@ import {
 } from "react-stripe-elements";
 import dayjs from "rc-picker/node_modules/dayjs";
 import { priceFormatter } from "../../../../utils";
+import { useMutation } from "@apollo/client";
+import {
+  createBookingVariables as CreateBookingVariables,
+  createBooking_createBooking as CreateBookingData,
+} from "../../../../graphql/mutations/__generated__/createBooking";
+import { MUTATION_CREATE_BOOKING } from "../../../../graphql";
 
 interface Props {
   modalVisible: boolean;
@@ -28,6 +34,10 @@ export const ListingCreateBookingModal = ({
   checkOutDate,
   stripe,
 }: Props & ReactStripeElements.InjectedStripeProps) => {
+  const [createBooking, { loading }] = useMutation<
+    CreateBookingData,
+    CreateBookingVariables
+  >(MUTATION_CREATE_BOOKING, {});
   const daysBooked = checkOutDate.diff(checkInDate, "days") + 1;
   const listingPrice = price * daysBooked;
 

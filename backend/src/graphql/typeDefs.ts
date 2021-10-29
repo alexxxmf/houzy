@@ -84,7 +84,7 @@ export const typeDefs = gql`
   }
 
   input CreateBookingInput {
-    id: ID!;
+    id: ID!
     source: String!
     checkIn: String!
     checkOut: String!
