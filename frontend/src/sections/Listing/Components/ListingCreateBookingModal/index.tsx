@@ -8,7 +8,11 @@ import {
   ReactStripeElements,
 } from "react-stripe-elements";
 import dayjs from "rc-picker/node_modules/dayjs";
-import { priceFormatter } from "../../../../utils";
+import {
+  displayErrorMessage,
+  displaySuccessNotification,
+  priceFormatter,
+} from "../../../../utils";
 import { useMutation } from "@apollo/client";
 import {
   createBookingVariables as CreateBookingVariables,
@@ -22,6 +26,9 @@ interface Props {
   price: number;
   checkInDate: Dayjs;
   checkOutDate: Dayjs;
+  id: string;
+  clearBookingData: () => void;
+  handleListingRefetch: () => Promise<void>;
 }
 
 const { Paragraph, Text, Title } = Typography;
@@ -33,20 +40,58 @@ export const ListingCreateBookingModal = ({
   checkInDate,
   checkOutDate,
   stripe,
+  id,
+  handleListingRefetch,
+  clearBookingData,
 }: Props & ReactStripeElements.InjectedStripeProps) => {
-  const [createBooking, { loading }] = useMutation<
+  const [createBooking, { loading, error }] = useMutation<
     CreateBookingData,
     CreateBookingVariables
-  >(MUTATION_CREATE_BOOKING, {});
+  >(MUTATION_CREATE_BOOKING, {
+    onCompleted: () => {
+      clearBookingData();
+      displaySuccessNotification(
+        "You've successfully booked the listing!",
+        "Booking history can always be found in your user page"
+      );
+      handleListingRefetch();
+    },
+    onError: () => {
+      displayErrorMessage(
+        "Sorry! We weren't able to successfully book the listing. please try again alter"
+      );
+    },
+  });
   const daysBooked = checkOutDate.diff(checkInDate, "days") + 1;
   const listingPrice = price * daysBooked;
 
   const handleCreateBooking = async () => {
     if (!stripe) {
-      return;
+      return displayErrorMessage(
+        "Sorry you weren't able to connect with Stripe"
+      );
     }
 
     const { token: stripeToken } = await stripe.createToken();
+
+    if (stripeToken) {
+      createBooking({
+        variables: {
+          input: {
+            source: stripeToken.id,
+            checkIn: dayjs(checkInDate).format("YYYY-MM-DD"),
+            checkOut: dayjs(checkOutDate).format("YYYY-MM-DD"),
+            id,
+          },
+        },
+      });
+    } else {
+      displayErrorMessage(
+        error && error.message
+          ? error.message
+          : "Sorry! We weren't able to book the listing. Please try again later."
+      );
+    }
   };
 
   return (
@@ -100,6 +145,8 @@ export const ListingCreateBookingModal = ({
             size="large"
             type="primary"
             className="listing-booking-modal__cta"
+            onClick={handleCreateBooking}
+            loading={loading}
           >
             Book
           </Button>

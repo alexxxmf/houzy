@@ -35,9 +35,16 @@ export const Listing = ({ match, viewer }: IProps) => {
     data: listingData,
     loading: listingLoading,
     error: listingError,
+    refetch,
   } = useQuery<IListingData, IListingVariables>(QUERY_LISTING, {
     variables: { id: userId, page: bookingsPage, limit: PAGE_LIMIT },
   });
+
+  const clearBookingData = () => {
+    setModalVisible(false);
+    setCheckInDate(null);
+    setCheckOutDate(null);
+  };
 
   if (listingError) {
     return (
@@ -47,6 +54,10 @@ export const Listing = ({ match, viewer }: IProps) => {
       </Content>
     );
   }
+
+  const handleListingRefetch = async () => {
+    await refetch();
+  };
 
   if (listingLoading) {
     return (
@@ -67,6 +78,9 @@ export const Listing = ({ match, viewer }: IProps) => {
         price={listing?.price}
         checkInDate={checkInDate}
         checkOutDate={checkOutDate}
+        id={listing.id}
+        clearBookingData={clearBookingData}
+        handleListingRefetch={handleListingRefetch}
       />
     ) : null;
 
