@@ -1,0 +1,11 @@
+{
+  "name": "houzy-deploy",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": "16.5.0"
+  },
+  "scripts": {
+    "starts": "node src/index.js"
+  }
+}
