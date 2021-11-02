@@ -68,8 +68,21 @@ export const bookingResolvers: IResolvers = {
           throw new Error("Viewer cannot book own listing ");
         }
 
+        const today = new Date();
         const checkInDate = new Date(checkIn);
         const checkOutDate = new Date(checkOut);
+
+        if (checkInDate.getTime() > today.getTime() + 120 * 86400000) {
+          throw new Error(
+            "check in date can't be more than 120 days from today"
+          );
+        }
+
+        if (checkOutDate.getTime() > today.getTime() + 120 * 86400000) {
+          throw new Error(
+            "check out date can't be more than 120 days from today"
+          );
+        }
 
         if (checkOutDate < checkInDate) {
           throw new Error("check out date can't be before check in date");

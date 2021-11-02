@@ -1,4 +1,4 @@
-import { Button, Card, Divider, Typography } from "antd";
+import { Button, Card, Divider, Tooltip, Typography } from "antd";
 import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { DatePicker } from "../../../../components";
@@ -48,7 +48,15 @@ const ListingCreateBooking = ({
     if (currentDate) {
       const dateIsBeforeEndOfDay = currentDate.isBefore(dayjs().endOf("day"));
 
-      return dateIsBeforeEndOfDay || dateIsBooked(currentDate);
+      const dateIsMoreThanFourMonthsAhead = dayjs(currentDate).isAfter(
+        dayjs().endOf("day").add(120, "days")
+      );
+
+      return (
+        dateIsBeforeEndOfDay ||
+        dateIsBooked(currentDate) ||
+        dateIsMoreThanFourMonthsAhead
+      );
     } else {
       return false;
     }
@@ -119,6 +127,39 @@ const ListingCreateBooking = ({
               format={"YYYY/MM/DD"}
               showToday={false}
               disabledDate={disabledDate}
+              dateRender={(current) => {
+                if (
+                  dayjs(current).isSame(
+                    checkInDate ? checkInDate : undefined,
+                    "day"
+                  )
+                ) {
+                  return (
+                    <Tooltip title="check in dat">
+                      <div className="ant-calendar-date ant-calendar-date__check-in">
+                        {current.date()}
+                      </div>
+                    </Tooltip>
+                  );
+                } else {
+                  return (
+                    <div className="ant-calendar-date">{current.date()}</div>
+                  );
+                }
+              }}
+              renderExtraFooter={() => {
+                return (
+                  <div>
+                    <Typography.Text
+                      type="secondary"
+                      className="ant-calendar-footer-text"
+                    >
+                      You can only book a listing within 120 days from today
+                    </Typography.Text>
+                    )
+                  </div>
+                );
+              }}
             />
           </div>
           <div className="listing-booking__card-date-picker">
@@ -130,6 +171,39 @@ const ListingCreateBooking = ({
               format={"YYYY/MM/DD"}
               showToday={false}
               disabledDate={disabledDate}
+              dateRender={(current) => {
+                if (
+                  dayjs(current).isSame(
+                    checkInDate ? checkInDate : undefined,
+                    "day"
+                  )
+                ) {
+                  return (
+                    <Tooltip title="check in dat">
+                      <div className="ant-calendar-date ant-calendar-date__check-in">
+                        {current.date()}
+                      </div>
+                    </Tooltip>
+                  );
+                } else {
+                  return (
+                    <div className="ant-calendar-date">{current.date()}</div>
+                  );
+                }
+              }}
+              renderExtraFooter={() => {
+                return (
+                  <div>
+                    <Typography.Text
+                      type="secondary"
+                      className="ant-calendar-footer-text"
+                    >
+                      Checkout cannot be before check in
+                    </Typography.Text>
+                    )
+                  </div>
+                );
+              }}
             />
           </div>
         </div>
