@@ -7,6 +7,7 @@ import mapBackground from "./assets/map-background.jpg";
 import { displayErrorMessage } from "../../utils";
 import sfImg from "./assets/sf.jpg";
 import cancunImg from "./assets/cancun.jpg";
+import { useScrollToTop } from "../../hooks/useScrollToTop";
 
 const { Content } = Layout;
 const { Paragraph, Title } = Typography;
@@ -20,6 +21,8 @@ export const Home = ({ history }: RouteComponentProps) => {
       displayErrorMessage("Please enter a valid search");
     }
   };
+
+  useScrollToTop();
 
   return (
     <Content

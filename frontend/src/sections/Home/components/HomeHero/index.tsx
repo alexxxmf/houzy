@@ -27,6 +27,7 @@ export const HomeHero = ({ onSearch }: IProps) => {
           size="large"
           enterButton
           className="home-hero__search-input"
+          data-testid="home-hero-search-bar"
           onSearch={onSearch}
         />
       </div>
