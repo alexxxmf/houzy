@@ -8,11 +8,35 @@ import { displayErrorMessage } from "../../utils";
 import sfImg from "./assets/sf.jpg";
 import cancunImg from "./assets/cancun.jpg";
 import { useScrollToTop } from "../../hooks/useScrollToTop";
+import { useQuery } from "@apollo/client";
+import { QUERY_LISTINGS } from "../../graphql";
+import {
+  ListingsVariables,
+  Listings_listings as ListingsData,
+} from "../../graphql/queries/__generated__/Listings";
+import { ListingsFilter } from "../../graphql/globalTypes";
 
 const { Content } = Layout;
 const { Paragraph, Title } = Typography;
 
+const PAGE_LIMIT = 4;
+const PAGE_NUMBER = 1;
+
 export const Home = ({ history }: RouteComponentProps) => {
+  const { data, loading } = useQuery<ListingsData, ListingsVariables>(
+    QUERY_LISTINGS,
+    {
+      variables: {
+        filter: ListingsFilter.PRICE_DESC,
+        page: PAGE_NUMBER,
+        limit: PAGE_LIMIT,
+      },
+      fetchPolicy: "cache-and-network",
+      // so when we add a new super expensive listing we can see it straightaway
+      // with default policy aggresive caching will prevent this unless manually refreshing window
+    }
+  );
+
   const onSearch = (value: string) => {
     const trimmedValue = value.trim();
     if (trimmedValue) {
