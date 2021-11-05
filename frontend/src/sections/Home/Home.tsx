@@ -12,9 +12,11 @@ import { useQuery } from "@apollo/client";
 import { QUERY_LISTINGS } from "../../graphql";
 import {
   ListingsVariables,
-  Listings_listings as ListingsData,
+  Listings as ListingsData,
 } from "../../graphql/queries/__generated__/Listings";
 import { ListingsFilter } from "../../graphql/globalTypes";
+import { HomeListingsSkeleton } from "./components/HomeListingsSkeleton";
+import { HomeListings } from "./components/HomeListings";
 
 const { Content } = Layout;
 const { Paragraph, Title } = Typography;
@@ -47,6 +49,23 @@ export const Home = ({ history }: RouteComponentProps) => {
   };
 
   useScrollToTop();
+
+  const renderListingsSection = () => {
+    if (loading) {
+      return <HomeListingsSkeleton />;
+    }
+
+    if (data) {
+      return (
+        <HomeListings
+          title="Premium Listings"
+          listings={data.listings.result}
+        />
+      );
+    }
+
+    return null;
+  };
 
   return (
     <Content
