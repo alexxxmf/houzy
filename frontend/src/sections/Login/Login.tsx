@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Card, Layout, Spin, Typography } from "antd";
-import { useApolloClient, useMutation } from "@apollo/client";
+import { useMutation, useApolloClient } from "@apollo/client";
 
 import googleLogo from "../../assets/google_logo.jpg";
 import { QUERY_AUTH_URL, MUTATION_LOG_IN } from "../../graphql";

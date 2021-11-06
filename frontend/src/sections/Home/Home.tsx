@@ -90,6 +90,8 @@ export const Home = ({ history }: RouteComponentProps) => {
         </Link>
       </div>
 
+      {renderListingsSection()}
+
       <div className="home__listings">
         <Title level={4} className="home__listings-title">
           Listings of any kind

@@ -1,5 +1,5 @@
 import { Home } from "../index";
-import { MockedProvider } from "@apollo/react-testing";
+import { MockedProvider } from "@apollo/client/testing";
 import { createMemoryHistory } from "history";
 import { render, waitFor, screen } from "@testing-library/react";
 import { Router } from "react-router-dom";
