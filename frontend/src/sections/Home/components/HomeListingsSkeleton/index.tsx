@@ -7,7 +7,10 @@ export const HomeListingsSkeleton = () => {
   const emptyData = [{}, {}, {}, {}];
 
   return (
-    <div className="home-listings-skeleton">
+    <div
+      className="home-listings-skeleton"
+      data-testid="home-listings-skeleton"
+    >
       <Skeleton paragraph={{ rows: 0 }} />
       <List
         grid={{

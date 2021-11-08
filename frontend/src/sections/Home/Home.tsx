@@ -34,10 +34,11 @@ export const Home = ({ history }: RouteComponentProps) => {
         limit: PAGE_LIMIT,
       },
       fetchPolicy: "cache-and-network",
-      // so when we add a new super expensive listing we can see it straightaway
-      // with default policy aggresive caching will prevent this unless manually refreshing window
     }
   );
+  // so when we add a new super expensive listing we can see it straightaway
+  // with default policy aggresive caching will prevent this unless manually refreshing window
+  // hence the policy
 
   const onSearch = (value: string) => {
     const trimmedValue = value.trim();
