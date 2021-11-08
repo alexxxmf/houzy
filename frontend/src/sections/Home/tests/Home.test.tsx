@@ -194,6 +194,43 @@ describe("Home Component", () => {
       });
     });
 
-    it("renders nothing when the query has an error", () => {});
+    it("renders nothing when the query has an error", async () => {
+      const listingsMock = {
+        request: {
+          query: QUERY_LISTINGS,
+          variables: {
+            filter: ListingsFilter.PRICE_DESC,
+            page: 1,
+            limit: 4,
+          },
+        },
+        error: new Error("Network Error"),
+      };
+
+      const history = createMemoryHistory();
+      const routeComponentPropsMock = {
+        history: {} as any,
+        location: {} as any,
+        match: {} as any,
+      };
+
+      const { queryByTestId } = render(
+        // From apollo docs
+        // In the example above, we set the addTypename prop of MockedProvider to false. This prevents Apollo Client
+        // from automatically adding the special __typename field to every object it queries for (it does this by default to support data normalization in the cache).
+        // We don't want to automatically add __typename to GET_DOG_QUERY in our test, because then it won't match the shape of the query that our mock is expecting
+        <MockedProvider mocks={[listingsMock]} addTypename={false}>
+          <Router history={history}>
+            {/* TODO: take a look at this, not sure why TS is not recognising stuff being passed by router */}
+            <Home {...routeComponentPropsMock} />
+          </Router>
+        </MockedProvider>
+      );
+
+      await waitFor(() => {
+        expect(queryByTestId("home-listings")).toBeNull();
+        expect(queryByTestId("home-listings-skeleton")).toBeNull();
+      });
+    });
   });
 });
