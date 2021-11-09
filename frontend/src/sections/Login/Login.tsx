@@ -12,7 +12,7 @@ import {
 import { displayErrorMessage, displaySuccessNotification } from "../../utils";
 import { Content } from "antd/lib/layout/layout";
 import { ErrorBanner } from "../../components";
-import { Redirect } from "react-router-dom";
+import { Redirect, useLocation } from "react-router-dom";
 import { Viewer } from "../../types";
 
 interface ILoginProps {
@@ -38,14 +38,15 @@ export const Login = ({ setViewer, viewer }: ILoginProps) => {
     });
 
   const logInRef = useRef(logIn);
+  const location = useLocation();
 
   useEffect(() => {
-    const urlSearchParams = new URLSearchParams(window.location.search);
+    const urlSearchParams = new URLSearchParams(location.search);
     const code = urlSearchParams.get("code") ?? "";
     if (code) {
       logInRef.current({ variables: { input: { code } } });
     }
-  }, []);
+  }, [location.search]);
 
   const onClickHandler = async () => {
     try {
@@ -54,7 +55,7 @@ export const Login = ({ setViewer, viewer }: ILoginProps) => {
       } = await apolloClient.query<IAuthUrlData>({
         query: QUERY_AUTH_URL,
       });
-      window.location.href = authUrl;
+      window.location.assign(authUrl);
     } catch (e) {
       displayErrorMessage(
         `Sorry! We weren't able to log you in. Please try again later!`
@@ -96,7 +97,11 @@ export const Login = ({ setViewer, viewer }: ILoginProps) => {
             Sign in with Google to start booking available rentals!
           </Typography.Text>
         </div>
-        <button className="log-in-card__google-button" onClick={onClickHandler}>
+        <button
+          className="log-in-card__google-button"
+          onClick={onClickHandler}
+          data-testid="log-in-google-btn"
+        >
           <img
             src={googleLogo}
             alt="Google Logo"

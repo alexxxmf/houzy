@@ -51,7 +51,7 @@ const UserProfile = ({
   );
 
   const redirectToStripe = () => {
-    window.location.href = stripeOauthUrl;
+    window.location.assign(stripeOauthUrl);
   };
 
   const additionalDetails = user.hasWallet ? (
