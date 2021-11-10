@@ -8,7 +8,7 @@ import {
   act,
 } from "@testing-library/react";
 import { Router } from "react-router-dom";
-import { QUERY_AUTH_URL, QUERY_LISTINGS } from "../../../graphql";
+import { MUTATION_LOG_IN, QUERY_AUTH_URL } from "../../../graphql";
 import { ListingsFilter } from "../../../graphql/globalTypes";
 import { ApolloLink } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
@@ -106,6 +106,44 @@ describe("Login", () => {
             "Sorry! We weren't able to log you in. Please try again later!"
           )
         ).not.toBeNull();
+      });
+    });
+  });
+
+  describe("login mutation", () => {
+    it("when no code exists in the /login route, the mutation is not fired", async () => {
+      const logInMock = {
+        request: {
+          query: MUTATION_LOG_IN,
+          variables: {
+            input: {
+              code: "1234",
+            },
+          },
+        },
+        result: {
+          data: {
+            id: "111",
+            token: "4321",
+            avatar: "image.png",
+            hasWallet: false,
+            didRequest: true,
+          },
+        },
+      };
+
+      const history = createMemoryHistory();
+
+      render(
+        <MockedProvider mocks={[logInMock]} addTypename={false}>
+          <Router history={history}>
+            <Login {...defaultProps} />
+          </Router>
+        </MockedProvider>
+      );
+
+      await waitFor(() => {
+        expect(history.location.pathname).not.toBe("/user/111");
       });
     });
   });
