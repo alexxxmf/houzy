@@ -146,5 +146,80 @@ describe("Login", () => {
         expect(history.location.pathname).not.toBe("/user/111");
       });
     });
+
+    describe("when code exists in the /login route as a query parameter", () => {
+      it("redirects the user to ther user page when the mutation is successful", async () => {
+        const logInMock = {
+          request: {
+            query: MUTATION_LOG_IN,
+            variables: {
+              input: {
+                code: "1234",
+              },
+            },
+          },
+          result: {
+            data: {
+              logIn: {
+                id: "111",
+                token: "4321",
+                avatar: "image.png",
+                hasWallet: false,
+                didRequest: true,
+              },
+            },
+          },
+        };
+
+        const history = createMemoryHistory({
+          initialEntries: ["/login?code=1234"],
+        });
+
+        render(
+          <MockedProvider mocks={[logInMock]} addTypename={false}>
+            <Router history={history}>
+              <Login {...defaultProps} />
+            </Router>
+          </MockedProvider>
+        );
+
+        await waitFor(() => {
+          expect(history.location.pathname).toBe("/user/111");
+        });
+      });
+
+      it("does not redirect the user to ther user page and displays an error message when the mutation is unsuccessful", async () => {
+        const logInMock = {
+          request: {
+            query: MUTATION_LOG_IN,
+            variables: {
+              input: {
+                code: "1234",
+              },
+            },
+          },
+          errors: [new GraphQLError("Somethign went wrong")],
+        };
+
+        const history = createMemoryHistory();
+
+        const { queryByText } = render(
+          <MockedProvider mocks={[logInMock]} addTypename={false}>
+            <Router history={history}>
+              <Login {...defaultProps} />
+            </Router>
+          </MockedProvider>
+        );
+
+        await waitFor(() => {
+          expect(history.location.pathname).not.toBe("/user/111");
+          expect(
+            queryByText(
+              "Sorry! We weren't able to log you in. Please try again later!"
+            )
+          ).not.toBeNull();
+        });
+      });
+    });
   });
 });

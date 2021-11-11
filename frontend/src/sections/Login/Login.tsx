@@ -65,7 +65,7 @@ export const Login = ({ setViewer, viewer }: ILoginProps) => {
 
   if (logInLoading) {
     return (
-      <Content className="log-in">
+      <Content className="log-in" data-testid="log-in-spinner">
         <Spin size="large" tip="Logging you in..." />
       </Content>
     );
