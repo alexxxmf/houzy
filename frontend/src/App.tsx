@@ -100,7 +100,7 @@ const App = () => {
               path="/listing/:id"
               render={(props) => (
                 <Elements>
-                  <Listing {...props} viewer={viewer} />{" "}
+                  <Listing {...props} viewer={viewer} />
                 </Elements>
               )}
             />

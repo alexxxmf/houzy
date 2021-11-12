@@ -21,7 +21,7 @@ const ListingCard = ({ listing }: IProps) => {
   const { title, image, address, price, numOfGuests, id } = listing;
 
   return (
-    <Link to={`/listing/${id}`}>
+    <Link to={`/listing/${id}`} data-testid={`listing-${id}`}>
       <Card
         hoverable
         cover={

@@ -17,10 +17,17 @@ describe(`Houze user flows`, () => {
     When I see a selection of listings for specific locations
     And I want to click on a specific one
     Then I am redirected to the listings page
-    And I can see a sorted collection of listings
-    `, () => {
-    cy.visit("/");
-    cy.wait("@gqlListingsQuery");
-    // .its("response.body.data.login");
+    And I can see a sorted collection of listings`, () => {
+    cy.visit("/")
+      .wait("@gqlListingsQuery")
+      .getByTestId("home-listings")
+      .children()
+      .eq(0)
+      .should("contain.text", "Premium Listings")
+      .getByTestId("home-listings")
+      .find("a")
+      .should("have.length", 4)
+      .getByTestId("listing-5d378db94e84753160e08b4c")
+      .click();
   });
 });
