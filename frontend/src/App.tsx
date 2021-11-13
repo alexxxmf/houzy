@@ -53,9 +53,9 @@ const App = () => {
         }
       }
     },
-    // onError: (error) => {
-    //   console.error(error);
-    // },
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   const logInRef = useRef(logIn);

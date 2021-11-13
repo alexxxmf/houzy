@@ -22,7 +22,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-stripe-elements": "^6.1.2",
-    "typescript": "^4.1.2",
+    "typescript": "^4.6.4",
     "web-vitals": "^1.0.1"
   },
   "scripts": {
@@ -31,7 +31,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "codegen:schema-download": "npx apollo service:download --endpoint=http://localhost:9000/api ./src/graphql/downloaded-schema/graphql-schema.json",
-    "codegen:generate-types": "npx apollo codegen:generate --localSchemaFile=./src/graphql/downloaded-schema/graphql-schema.json --includes=src/**/*.ts --globalTypesFile=./src/graphql/globalTypes.ts --target=typescript"
+    "codegen:generate-types": "npx apollo codegen:generate --localSchemaFile=./src/graphql/downloaded-schema/graphql-schema.json --includes=src/**/*.ts --globalTypesFile=./src/graphql/globalTypes.ts --target=typescript",
+    "cypress:open": "cypress open --browser chrome",
+    "cypress:run": "cypress run --browser chrome",
+    "cypress:headless": "cypress run"
   },
   "eslintConfig": {
     "extends": [
@@ -53,8 +56,11 @@
   },
   "proxy": "http://localhost:9000",
   "devDependencies": {
+    "@cypress/react": "^5.12.5",
+    "@cypress/webpack-dev-server": "^1.8.4",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.1.5",
-    "@testing-library/user-event": "^12.1.10"
+    "@testing-library/user-event": "^12.1.10",
+    "cypress": "^9.6.1"
   }
 }
