@@ -1,5 +1,5 @@
 import { setAliasMutation, setAliasAndResponse } from "utils";
-import { listings } from "../fixtures";
+import { listings, login } from "../fixtures";
 
 describe(`Houze user flows`, () => {
   beforeEach(() => {
@@ -9,15 +9,18 @@ describe(`Houze user flows`, () => {
         data: listings,
       });
 
-      // Mutations
-      setAliasMutation(req, "Login");
+      setAliasAndResponse(req, "logIn", "Mutation", {
+        data: login,
+      });
     });
   });
   it(`As a user, when I'm on the home page
-    When I see a selection of listings for specific locations
+    When I see a selection of premium listings
     And I want to click on a specific one
-    Then I am redirected to the listings page
-    And I can see a sorted collection of listings`, () => {
+    Then I am redirected to the listing detail page
+    And I can see listing details
+    And I can see host details
+    And I can book that listing`, () => {
     cy.visit("/")
       .wait("@gqlListingsQuery")
       .getByTestId("home-listings")

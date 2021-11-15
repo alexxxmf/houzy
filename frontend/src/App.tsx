@@ -39,6 +39,7 @@ const App = () => {
   >(MUTATION_LOG_IN, {
     onCompleted: (logInData) => {
       if (logInData?.logIn) {
+        console.log("viewer", logInData);
         setViewer(logInData.logIn);
 
         if (logInData?.logIn?.token) {
