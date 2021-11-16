@@ -83,10 +83,10 @@ const ListingCreateBooking = ({
           bookingsIndexJSON[year][month] &&
           bookingsIndexJSON[year][month][day]
         ) {
+          return displayErrorMessage(
+            "You can't book a period of time that overlaps existing bookings. Please try again!"
+          );
         }
-        return displayErrorMessage(
-          "You can't book a period of time that overlaps existing bookings. Please try again!"
-        );
       }
     }
     setCheckOutDate(selectedCheckOutDate);
