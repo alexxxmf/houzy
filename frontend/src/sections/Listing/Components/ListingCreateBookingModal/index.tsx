@@ -101,7 +101,10 @@ export const ListingCreateBookingModal = ({
       footer={null}
       onCancel={() => setModalVisible(false)}
     >
-      <div className="listing-booking-modal">
+      <div
+        className="listing-booking-modal"
+        data-testid="listing-booking-modal"
+      >
         <div className="listing-booking-modal__intro">
           <Title className="listing-booking-modal__intro-title">
             <KeyOutlined />
@@ -147,6 +150,7 @@ export const ListingCreateBookingModal = ({
             className="listing-booking-modal__cta"
             onClick={handleCreateBooking}
             loading={loading}
+            data-testid="listing-booking-modal-cta-btn"
           >
             Book
           </Button>
