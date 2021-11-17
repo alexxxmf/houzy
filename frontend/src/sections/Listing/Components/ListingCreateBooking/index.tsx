@@ -118,7 +118,10 @@ const ListingCreateBooking = ({
             </Typography.Title>
           </Typography.Paragraph>
           <Divider />
-          <div className="listing-booking__card-date-picker">
+          <div
+            className="listing-booking__card-date-picker"
+            data-testid="listing-booking-date-picker-check-in"
+          >
             <Typography.Paragraph strong>Check In</Typography.Paragraph>
             <DatePicker
               onChange={setCheckInDate}
@@ -162,7 +165,10 @@ const ListingCreateBooking = ({
               }}
             />
           </div>
-          <div className="listing-booking__card-date-picker">
+          <div
+            className="listing-booking__card-date-picker"
+            data-testid="listing-booking-date-picker-check-out"
+          >
             <Typography.Paragraph strong>Check Out</Typography.Paragraph>
             <DatePicker
               onChange={verifyAndSetCheckOutDate}
@@ -216,6 +222,7 @@ const ListingCreateBooking = ({
           onClick={() => {
             setModalVisible(true);
           }}
+          data-testid="listing-booking-cta-btn"
         >
           Request to book!
         </Button>

@@ -1,5 +1,6 @@
 import { setAliasMutation, setAliasAndResponse } from "utils";
 import { listings, login } from "../fixtures";
+import dayjs from "dayjs";
 
 describe(`Houze user flows`, () => {
   beforeEach(() => {
@@ -21,6 +22,11 @@ describe(`Houze user flows`, () => {
     And I can see listing details
     And I can see host details
     And I can book that listing`, () => {
+    const now = dayjs();
+    const tomorrow = now.add(1, "days").format("YYYY-MM-DD");
+    const twoDaysAgo = now.subtract(2, "days").format("YYYY-MM-DD");
+    const fourDaysAhead = now.add(4, "days").format("YYYY-MM-DD");
+
     cy.visit("/")
       .wait("@gqlListingsQuery")
       .getByTestId("home-listings")
@@ -31,6 +37,36 @@ describe(`Houze user flows`, () => {
       .find("a")
       .should("have.length", 4)
       .getByTestId("listing-5d378db94e84753160e08b4c")
+      .click()
+      .getByTestId("listing-booking-date-picker-check-in")
+      .children()
+      .eq(0)
+      .should("contain.text", "Check In")
+      .getByTestId("listing-booking-date-picker-check-in")
+      .children()
+      .eq(1)
+      .click()
+      .get(`td[title*="${tomorrow}"]`)
+      .eq(0)
+      .click()
+      .getByTestId("listing-booking-date-picker-check-out")
+      .should("contain.text", "Check Out")
+      .getByTestId("listing-booking-date-picker-check-out")
+      .children()
+      .eq(1)
+      .click()
+      .get(`td[title*="${twoDaysAgo}"]`)
+      .eq(1)
+      // This means this date is not clickable
+      .should("have.css", "pointer-events", "none")
+      .getByTestId("listing-booking-date-picker-check-out")
+      .children()
+      .eq(1)
+      .click()
+      .get(`td[title*="${fourDaysAhead}"]`)
+      .eq(1)
+      .click()
+      .getByTestId("listing-booking-cta-btn")
       .click();
   });
 });
