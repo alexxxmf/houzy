@@ -8,38 +8,53 @@ const FEE_TO_BE_COLLECTED = 0.05;
 
 export const Stripe = {
   connect: async (code: string) => {
-    const response = await client.oauth.token({
-      grant_type: "authorization_code",
-      code,
-    });
-    if (!response) {
+    try {
+      const response = await client.oauth.token({
+        grant_type: "authorization_code",
+        code,
+      });
+      if (!response) {
+        return new Error("failed to connect to Stripe!");
+      }
+      return response;
+    } catch (e) {
       return new Error("failed to connect to Stripe!");
     }
-    return response;
   },
   disconnect: async (stripeUserId: string) => {
-    const response = await client.oauth.deauthorize({
-      client_id: `${process.env.STRIPE_CLIENT_ID}`,
-      stripe_user_id: stripeUserId,
-    });
-
-    return response;
+    try {
+      const response = await client.oauth.deauthorize({
+        client_id: `${process.env.STRIPE_CLIENT_ID}`,
+        stripe_user_id: stripeUserId,
+      });
+      return response;
+    } catch (e) {
+      throw new Error("there was a problem while disconnecting");
+    }
   },
-  charge: async (amount: number, source: string, stripeAccount: string) => {
-    const res = await client.charges.create(
-      {
-        amount,
-        currency: "eur",
-        source,
-        application_fee_amount: Math.round(amount * FEE_TO_BE_COLLECTED),
-      },
-      {
-        stripeAccount,
-      }
-    );
+  charge: async (
+    amount: number,
+    source: string,
+    stripeAccount: string
+  ): Promise<void> => {
+    try {
+      const res = await client.charges.create(
+        {
+          amount,
+          currency: "eur",
+          source,
+          application_fee_amount: 1,
+        },
+        {
+          stripeAccount,
+        }
+      );
 
-    if (res.status !== "succeeded") {
-      throw new Error("failed to create charge with Stripe");
+      if (res.status !== "succeeded") {
+        throw new Error("failed to create charge with Stripe");
+      }
+    } catch (e) {
+      throw new Error("Stripe error");
     }
   },
 };

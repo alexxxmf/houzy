@@ -45,7 +45,7 @@ const UserBookings = ({ page, limit, userBookings, setPage }: IProps) => {
   return (
     <div className="user-bookings">
       <Typography.Title level={4} className="user-bookings__title">
-        Listings
+        Bookings
       </Typography.Title>
       <Typography.Paragraph>
         This section contains the bookings you've made so far

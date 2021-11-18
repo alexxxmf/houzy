@@ -39,9 +39,7 @@ const App = () => {
   >(MUTATION_LOG_IN, {
     onCompleted: (logInData) => {
       if (logInData?.logIn) {
-        console.log("viewer", logInData);
         setViewer(logInData.logIn);
-
         if (logInData?.logIn?.token) {
           sessionStorage.setItem(
             process.env.REACT_APP_CSRF_TOKEN_KEY || "",
@@ -69,7 +67,7 @@ const App = () => {
     <ErrorBanner description="We weren't able to verify if you were logged in. Please try again later!" />
   ) : null;
 
-  if (!viewer.didRequest && !logInError && logInLoading) {
+  if ((!viewer.didRequest || logInLoading) && !logInError) {
     return (
       <Layout id="app-skeleton">
         <AppHeaderSkeleton />

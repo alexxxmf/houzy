@@ -93,7 +93,7 @@ const UserProfile = ({
         Connect with Stripe
       </Button>
       <Typography.Paragraph type="secondary">
-        Houzy uses
+        Houzy uses{" "}
         <a
           href="https://stripe.com/en-US/connect"
           target="_blank"

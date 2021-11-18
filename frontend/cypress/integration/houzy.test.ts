@@ -13,6 +13,10 @@ describe(`Houze user flows`, () => {
       setAliasAndResponse(req, "logIn", "Mutation", {
         data: login,
       });
+
+      setAliasAndResponse(req, "createBooking", "Mutation", {
+        data: {},
+      });
     });
   });
   it(`As a user, when I'm on the home page
@@ -29,6 +33,7 @@ describe(`Houze user flows`, () => {
     const fourDaysAhead = now.add(4, "days").format("YYYY-MM-DD");
 
     cy.visit("/")
+      .wait("@gqllogInMutation")
       .wait("@gqlListingsQuery")
       .getByTestId("home-listings")
       .children()
@@ -76,13 +81,14 @@ describe(`Houze user flows`, () => {
       .should("contain.text", "27")
       .should("contain.text", "2022")
       .get(`td[title*="${fourDaysAhead}"]`)
-
       .get("#stripe-elements-card-field")
       .within(() => {
         cy.fillElementsInput("cardNumber", "4242424242424242");
         cy.fillElementsInput("cardExpiry", "1025"); // MMYY
         cy.fillElementsInput("cardCvc", "123");
       })
-      .getByTestId("listing-booking-modal-cta-btn");
+      .getByTestId("listing-booking-modal-cta-btn")
+      .click()
+      .wait("@gqlcreateBookingMutation");
   });
 });

@@ -7,8 +7,9 @@ import {
 } from "../../graphql/mutations/__generated__/connectStripe";
 import { MUTATION_CONNECT_STRIPE } from "../../graphql";
 import { Viewer } from "../../types";
-import { Redirect, RouteComponentProps } from "react-router-dom";
+import { Redirect, RouteComponentProps, useHistory } from "react-router-dom";
 import { displaySuccessNotification } from "../../utils";
+import { useScrollToTop } from "../../hooks/useScrollToTop";
 
 interface Props {
   viewer: Viewer;
@@ -17,11 +18,7 @@ interface Props {
 
 const { Content } = Layout;
 
-export const Stripe = ({
-  viewer,
-  setViewer,
-  history,
-}: Props & RouteComponentProps) => {
+export const Stripe = ({ viewer, setViewer }: Props & RouteComponentProps) => {
   const [connectStripe, { data, loading, error }] = useMutation<
     ConnectStripeData,
     ConnectStripeVariables
@@ -36,7 +33,11 @@ export const Stripe = ({
       }
     },
   });
+
   const connectStripeRef = useRef(connectStripe);
+
+  const history = useHistory();
+  useScrollToTop();
 
   useEffect(() => {
     const code = new URL(window.location.href).searchParams.get("code");
@@ -56,17 +57,17 @@ export const Stripe = ({
     return <Redirect to={`/user/${viewer.id}`} />;
   }
 
-  if (loading) {
-    return (
-      <Content className="stripe">
-        <Spin size="large" tip="Connecting your Stripe account..." />
-      </Content>
-    );
-  }
+  // if (loading) {
+  //   return (
+  //     <Content className="stripe">
+  //       <Spin size="large" tip="Connecting your Stripe account..." />
+  //     </Content>
+  //   );
+  // }
 
-  if (error) {
-    return <Redirect to={`/user/${viewer.id}?stripe_error=true`} />;
-  }
+  // if (error) {
+  //   return <Redirect to={`/user/${viewer.id}?stripe_error=true`} />;
+  // }
 
   return null;
 };

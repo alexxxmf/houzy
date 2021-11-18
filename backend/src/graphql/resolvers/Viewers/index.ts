@@ -146,7 +146,7 @@ export const viewerResolvers: IResolvers = {
           _id: viewer._id,
           token: viewer.token,
           avatar: viewer.avatar,
-          walletId: viewer.avatar,
+          walletId: viewer.walletId,
           didRequest: true,
         };
       } catch (e) {
@@ -169,7 +169,7 @@ export const viewerResolvers: IResolvers = {
     connectStripe: async (
       _root: undefined,
       { input }: ConnectStripeArgs,
-      { db, res, req }: Context
+      { db, req }: Context
     ): Promise<Viewer> => {
       try {
         const { code } = input;
@@ -180,14 +180,15 @@ export const viewerResolvers: IResolvers = {
           throw new Error("viewer cannot be found");
         }
 
-        const wallet = await Stripe.connect(code);
-        if (!wallet) {
+        const wallet = (await Stripe.connect(code)) as st.OAuthToken;
+
+        if (!wallet || !wallet.stripe_user_id) {
           throw new Error("stripe grant error");
         }
 
         const updateRes = await db.users.findOneAndUpdate(
           { _id: viewer._id },
-          { $set: { walletId: (wallet as st.OAuthToken).stripe_user_id } },
+          { $set: { walletId: wallet.stripe_user_id } },
           { returnOriginal: false }
         );
 
@@ -220,7 +221,13 @@ export const viewerResolvers: IResolvers = {
           throw new Error("viewer cannot be found");
         }
 
+        console.log("================");
+        console.log("1");
+        console.log("================");
         const wallet = await Stripe.disconnect(viewer.walletId);
+        console.log("================");
+        console.log("2");
+        console.log("================");
         if (!wallet) {
           throw new Error("stripe disconnect error");
         }

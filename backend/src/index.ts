@@ -15,8 +15,9 @@ const mount = async (app: Application) => {
   app.use(cookieParser(process.env.SECRET));
   app.use(compression());
 
-  app.use(express.static(`${__dirname}/client`));
-  app.get("*", (_req, res) => res.sendFile(`${__dirname}/client/index.html`));
+  // TODO: in case we wanna play with serving static from the same instance as server
+  // app.use(express.static(`${__dirname}/client`));
+  // app.get("*", (_req, res) => res.sendFile(`${__dirname}/client/index.html`));
 
   const server = new ApolloServer({
     typeDefs,
