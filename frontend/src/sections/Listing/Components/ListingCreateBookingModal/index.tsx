@@ -143,6 +143,7 @@ export const ListingCreateBookingModal = ({
           <CardElement
             hidePostalCode
             className="listing-booking-modal__stripe-card"
+            id="stripe-elements-card-field"
           />
           <Button
             size="large"

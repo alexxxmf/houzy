@@ -61,6 +61,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^12.1.5",
     "@testing-library/user-event": "^12.1.10",
-    "cypress": "^9.6.1"
+    "cypress": "^9.6.1",
+    "cypress-plugin-stripe-elements": "^1.0.2"
   }
 }

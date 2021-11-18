@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "strict": true,
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["cypress"],
+    "types": ["cypress", "cypress-plugin-stripe-elements"],
     "baseUrl": "./"
   },
   "include": ["**/*.ts"]

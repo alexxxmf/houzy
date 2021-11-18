@@ -75,6 +75,14 @@ describe(`Houze user flows`, () => {
       .should("contain.text", "24")
       .should("contain.text", "27")
       .should("contain.text", "2022")
+      .get(`td[title*="${fourDaysAhead}"]`)
+
+      .get("#stripe-elements-card-field")
+      .within(() => {
+        cy.fillElementsInput("cardNumber", "4242424242424242");
+        cy.fillElementsInput("cardExpiry", "1025"); // MMYY
+        cy.fillElementsInput("cardCvc", "123");
+      })
       .getByTestId("listing-booking-modal-cta-btn");
   });
 });
