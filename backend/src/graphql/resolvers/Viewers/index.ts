@@ -221,13 +221,8 @@ export const viewerResolvers: IResolvers = {
           throw new Error("viewer cannot be found");
         }
 
-        console.log("================");
-        console.log("1");
-        console.log("================");
         const wallet = await Stripe.disconnect(viewer.walletId);
-        console.log("================");
-        console.log("2");
-        console.log("================");
+
         if (!wallet) {
           throw new Error("stripe disconnect error");
         }
