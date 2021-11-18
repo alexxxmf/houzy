@@ -29,7 +29,6 @@ describe(`Houze user flows`, () => {
     const now = dayjs();
     const tomorrow = now.add(1, "days").format("YYYY-MM-DD");
     const twoDaysAgo = now.subtract(2, "days").format("YYYY-MM-DD");
-    const twoDaysStr = now.subtract(2, "days").format("YYYY-MM-DD");
     const fourDaysAhead = now.add(4, "days").format("YYYY-MM-DD");
 
     cy.visit("/")
@@ -77,9 +76,9 @@ describe(`Houze user flows`, () => {
       .getByTestId("listing-booking-modal")
       .should("be.visible")
       .should("contain.text", "Book your trip")
-      .should("contain.text", "24")
-      .should("contain.text", "27")
-      .should("contain.text", "2022")
+      .should("contain.text", tomorrow.split("-")[2])
+      .should("contain.text", fourDaysAhead.split("-")[2])
+      .should("contain.text", tomorrow.split("-")[0])
       .get(`td[title*="${fourDaysAhead}"]`)
       .get("#stripe-elements-card-field")
       .within(() => {
