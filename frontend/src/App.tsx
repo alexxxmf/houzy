@@ -19,7 +19,7 @@ import {
   logIn as ILogInData,
 } from "./graphql/mutations/__generated__/logIn";
 import { AppHeaderSkeleton, ErrorBanner } from "./components";
-import { Spin } from "antd";
+import { Spin, Typography } from "antd";
 import { Stripe } from "./sections/Stripe/Stripe";
 import { StripeProvider, Elements } from "react-stripe-elements";
 
@@ -69,7 +69,7 @@ const App = () => {
 
   if ((!viewer.didRequest || logInLoading) && !logInError) {
     return (
-      <Layout id="app-skeleton">
+      <Layout className="app-skeleton">
         <AppHeaderSkeleton />
         <div className="app-skeleton__spin-section">
           <Spin size="large" tip="Launching Houzy" />

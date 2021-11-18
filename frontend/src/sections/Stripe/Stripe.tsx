@@ -57,17 +57,17 @@ export const Stripe = ({ viewer, setViewer }: Props & RouteComponentProps) => {
     return <Redirect to={`/user/${viewer.id}`} />;
   }
 
-  // if (loading) {
-  //   return (
-  //     <Content className="stripe">
-  //       <Spin size="large" tip="Connecting your Stripe account..." />
-  //     </Content>
-  //   );
-  // }
+  if (loading) {
+    return (
+      <Content className="stripe">
+        <Spin size="large" tip="Connecting your Stripe account..." />
+      </Content>
+    );
+  }
 
-  // if (error) {
-  //   return <Redirect to={`/user/${viewer.id}?stripe_error=true`} />;
-  // }
+  if (error) {
+    return <Redirect to={`/user/${viewer.id}?stripe_error=true`} />;
+  }
 
   return null;
 };
