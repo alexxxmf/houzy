@@ -19,9 +19,15 @@ import {
   logIn as ILogInData,
 } from "./graphql/mutations/__generated__/logIn";
 import { AppHeaderSkeleton, ErrorBanner } from "./components";
-import { Spin, Typography } from "antd";
+import { Spin } from "antd";
 import { Stripe } from "./sections/Stripe/Stripe";
-import { StripeProvider, Elements } from "react-stripe-elements";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import "@stripe/stripe-js";
+
+const stripePromise = loadStripe(
+  process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY as string
+);
 
 const initialViewer: Viewer = {
   id: null,
@@ -79,56 +85,52 @@ const App = () => {
   }
 
   return (
-    <StripeProvider
-      apiKey={process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY as string}
-    >
-      <Router>
-        <Layout id="app">
-          {logInErrorBannerElement}
-          <AppHeader setViewer={setViewer} viewer={viewer} />
-          <Switch>
-            <Route exact path="/" component={Home} />
-            <Route
-              exact
-              path="/host"
-              render={(props) => <Host {...props} viewer={viewer} />}
-            />
-            <Route exact path="/listings/:location?" component={Listings} />
-            <Route
-              exact
-              path="/listing/:id"
-              render={(props) => (
-                <Elements>
-                  <Listing {...props} viewer={viewer} />
-                </Elements>
-              )}
-            />
-            <Route
-              exact
-              path="/user/:id"
-              render={(props) => (
-                <User {...props} viewer={viewer} setViewer={setViewer} />
-              )}
-            />
-            <Route
-              exact
-              path="/login"
-              render={(props) => (
-                <Login {...props} setViewer={setViewer} viewer={viewer} />
-              )}
-            />
-            <Route
-              exact
-              path="/stripe"
-              render={(props) => (
-                <Stripe {...props} setViewer={setViewer} viewer={viewer} />
-              )}
-            />
-            <Route component={NotFound} />
-          </Switch>
-        </Layout>
-      </Router>
-    </StripeProvider>
+    <Router>
+      <Layout id="app">
+        {logInErrorBannerElement}
+        <AppHeader setViewer={setViewer} viewer={viewer} />
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route
+            exact
+            path="/host"
+            render={(props) => <Host {...props} viewer={viewer} />}
+          />
+          <Route exact path="/listings/:location?" component={Listings} />
+          <Route
+            exact
+            path="/listing/:id"
+            render={(props) => (
+              <Elements stripe={stripePromise}>
+                <Listing {...props} viewer={viewer} />
+              </Elements>
+            )}
+          />
+          <Route
+            exact
+            path="/user/:id"
+            render={(props) => (
+              <User {...props} viewer={viewer} setViewer={setViewer} />
+            )}
+          />
+          <Route
+            exact
+            path="/login"
+            render={(props) => (
+              <Login {...props} setViewer={setViewer} viewer={viewer} />
+            )}
+          />
+          <Route
+            exact
+            path="/stripe"
+            render={(props) => (
+              <Stripe {...props} setViewer={setViewer} viewer={viewer} />
+            )}
+          />
+          <Route component={NotFound} />
+        </Switch>
+      </Layout>
+    </Router>
   );
 };
 

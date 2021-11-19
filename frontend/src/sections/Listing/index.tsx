@@ -14,7 +14,7 @@ import { ErrorBanner } from "../../components";
 import ListingDetails from "./Components/ListingDetails";
 import ListingBookings from "./Components/ListingBookings";
 import ListingCreateBooking from "./Components/ListingCreateBooking";
-import { WrappedListingCreateBookingModal as ListingCreateBookingModal } from "./Components/ListingCreateBookingModal";
+import { ListingCreateBookingModal } from "./Components/ListingCreateBookingModal";
 
 const PAGE_LIMIT = 4;
 

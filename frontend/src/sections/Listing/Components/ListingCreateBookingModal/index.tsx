@@ -2,11 +2,8 @@ import React from "react";
 import { Modal, Button, Divider, Typography } from "antd";
 import { Dayjs } from "dayjs";
 import { KeyOutlined } from "@ant-design/icons";
-import {
-  CardElement,
-  injectStripe,
-  ReactStripeElements,
-} from "react-stripe-elements";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { StripeCardElement } from "@stripe/stripe-js";
 import dayjs from "rc-picker/node_modules/dayjs";
 import {
   displayErrorMessage,
@@ -39,11 +36,13 @@ export const ListingCreateBookingModal = ({
   price,
   checkInDate,
   checkOutDate,
-  stripe,
   id,
   handleListingRefetch,
   clearBookingData,
-}: Props & ReactStripeElements.InjectedStripeProps) => {
+}: Props) => {
+  const stripe = useStripe();
+  const elements = useElements();
+
   const [createBooking, { loading, error }] = useMutation<
     CreateBookingData,
     CreateBookingVariables
@@ -66,19 +65,23 @@ export const ListingCreateBookingModal = ({
   const listingPrice = price * daysBooked;
 
   const handleCreateBooking = async () => {
-    if (!stripe) {
+    if (!stripe || !elements) {
       return displayErrorMessage(
         "Sorry you weren't able to connect with Stripe"
       );
     }
 
-    const { token: stripeToken } = await stripe.createToken();
+    const cardElement = elements.getElement(CardElement);
 
-    if (stripeToken) {
+    const stripeToken = await stripe.createToken(
+      cardElement as StripeCardElement
+    );
+
+    if (stripeToken && stripeToken.token) {
       createBooking({
         variables: {
           input: {
-            source: stripeToken.id,
+            source: stripeToken.token.id,
             checkIn: dayjs(checkInDate).format("YYYY-MM-DD"),
             checkOut: dayjs(checkOutDate).format("YYYY-MM-DD"),
             id,
@@ -114,10 +117,10 @@ export const ListingCreateBookingModal = ({
           </Title>
           <Paragraph>
             Enter your payment information to book the listing from the dates
-            between
+            between{" "}
             <Text mark strong>
               {dayjs(checkInDate).format("MMMM Do YYYY")}
-            </Text>
+            </Text>{" "}
             <Text mark strong>
               {dayjs(checkOutDate).format("MMMM Do YYYY")}
             </Text>
@@ -130,7 +133,6 @@ export const ListingCreateBookingModal = ({
         <div className="listing-booking-modal__charge-summary">
           <Paragraph>
             {priceFormatter(price)} * {daysBooked} days
-            <Text strong>{priceFormatter(listingPrice)}</Text>
           </Paragraph>
           <Paragraph className="listing-booking-modal__charge-summary-total">
             Total = <Text strong>{priceFormatter(listingPrice)}</Text>
@@ -141,9 +143,9 @@ export const ListingCreateBookingModal = ({
 
         <div className="listing-booking-modal__stripe-card-section">
           <CardElement
-            hidePostalCode
             className="listing-booking-modal__stripe-card"
             id="stripe-elements-card-field"
+            options={{ hidePostalCode: true }}
           />
           <Button
             size="large"
@@ -160,7 +162,3 @@ export const ListingCreateBookingModal = ({
     </Modal>
   );
 };
-
-export const WrappedListingCreateBookingModal = injectStripe(
-  ListingCreateBookingModal
-);
