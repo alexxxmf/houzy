@@ -1,5 +1,5 @@
 import { setAliasMutation, setAliasAndResponse } from "utils";
-import { listings, login } from "../fixtures";
+import { listings, login, tokenResponse, booking, listing } from "../fixtures";
 import dayjs from "dayjs";
 
 describe(`Houze user flows`, () => {
@@ -15,9 +15,17 @@ describe(`Houze user flows`, () => {
       });
 
       setAliasAndResponse(req, "createBooking", "Mutation", {
-        data: {},
+        data: booking,
+      });
+
+      setAliasAndResponse(req, "Listing", "Query", {
+        data: listing,
       });
     });
+
+    cy.intercept("POST", "https://api.stripe.com/v1/tokens", tokenResponse).as(
+      "postStripeToken"
+    );
   });
   it(`As a user, when I'm on the home page
     When I see a selection of premium listings
@@ -88,6 +96,7 @@ describe(`Houze user flows`, () => {
       })
       .getByTestId("listing-booking-modal-cta-btn")
       .click()
+      .wait("@postStripeToken")
       .wait("@gqlcreateBookingMutation");
   });
 });

@@ -65,14 +65,14 @@ export const Listings = ({ match }: RouteComponentProps<MatchParams>) => {
     );
   }
 
-  const listingSectionElement =
+  const listingsSectionElement =
     listings && listings.result.length ? (
       <div>
         <Affix offsetTop={64}>
           <ListingsPagination
             total={listings.total}
-            limit={PAGE_LIMIT}
             page={page}
+            limit={PAGE_LIMIT}
             setPage={setPage}
           />
           <ListingsFilters filter={filter} setFilter={setFilter} />
@@ -92,29 +92,29 @@ export const Listings = ({ match }: RouteComponentProps<MatchParams>) => {
           )}
         />
       </div>
-    ) : null;
+    ) : (
+      <div>
+        <Paragraph>
+          It appears that no listings have yet been created for{" "}
+          <Text mark>"{listingsRegion}"</Text>
+        </Paragraph>
+        <Paragraph>
+          Be the first person to create a{" "}
+          <Link to="/host">listing in this area</Link>!
+        </Paragraph>
+      </div>
+    );
 
   const listingsRegionElement = listingsRegion ? (
     <Title level={3} className="listings__title">
       Results for "{listingsRegion}"
     </Title>
-  ) : (
-    <div>
-      <Paragraph>
-        It appears that no listings have yet been created for{" "}
-        <Text mark>"{listingsRegion}"</Text>
-      </Paragraph>
-      <Paragraph>
-        Be the first person to create a{" "}
-        <Link to="/host">listing in this area</Link>!
-      </Paragraph>
-    </div>
-  );
+  ) : null;
 
   return (
     <Content className="listings">
       {listingsRegionElement}
-      {listingSectionElement}
+      {listingsSectionElement}
     </Content>
   );
 };
