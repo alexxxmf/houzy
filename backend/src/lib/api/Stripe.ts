@@ -38,15 +38,11 @@ export const Stripe = {
     stripeAccount: string
   ): Promise<void> => {
     try {
-      console.log("amount", amount);
-      console.log("source", source);
-      console.log("stripeAccount", stripeAccount);
-
       const res = await client.charges.create(
         {
           amount,
           currency: "eur",
-          source: "tok_amex",
+          source,
           application_fee_amount: Math.round(amount * FEE_TO_BE_COLLECTED),
         },
         {
@@ -58,7 +54,6 @@ export const Stripe = {
         throw new Error("failed to create charge with Stripe");
       }
     } catch (e) {
-      console.log("e", e);
       throw new Error("Stripe error");
     }
   },

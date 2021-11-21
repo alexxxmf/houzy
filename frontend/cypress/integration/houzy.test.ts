@@ -4,27 +4,53 @@ import dayjs from "dayjs";
 
 describe(`Houze user flows`, () => {
   beforeEach(() => {
-    // TODO: pass this as cypress env variable
-    cy.intercept("POST", "http://localhost:9000/api", (req) => {
-      setAliasAndResponse(req, "Listings", "Query", {
-        data: listings,
-      });
-
-      setAliasAndResponse(req, "logIn", "Mutation", {
-        data: login,
-      });
-
-      setAliasAndResponse(req, "createBooking", "Mutation", {
-        data: booking,
-      });
-
-      setAliasAndResponse(req, "Listing", "Query", {
-        data: listing,
-      });
-    });
+    // Great suggestion for cypress
+    // https://www.jayfreestone.com/writing/stubbing-graphql-cypress/
+    Cypress.config("interceptions", {});
 
     cy.intercept("POST", "https://api.stripe.com/v1/tokens", tokenResponse).as(
       "postStripeToken"
+    );
+
+    cy.intercept("POST", "https://m.stripe.com/6", {});
+
+    cy.intercept("POST", "https://r.stripe.com/0", {});
+
+    cy.interceptGQL(
+      "http://localhost:9000/api",
+      "Listings",
+      {
+        data: listings,
+        erros: [],
+      },
+      "listings"
+    );
+    cy.interceptGQL(
+      "http://localhost:9000/api",
+      "logIn",
+      {
+        data: login,
+        erros: [],
+      },
+      "login"
+    );
+    cy.interceptGQL(
+      "http://localhost:9000/api",
+      "createBooking",
+      {
+        data: booking,
+        erros: [],
+      },
+      "createBooking"
+    );
+    cy.interceptGQL(
+      "http://localhost:9000/api",
+      "Listing",
+      {
+        data: listing,
+        erros: [],
+      },
+      "listing"
     );
   });
   it(`As a user, when I'm on the home page
@@ -40,8 +66,8 @@ describe(`Houze user flows`, () => {
     const fourDaysAhead = now.add(4, "days").format("YYYY-MM-DD");
 
     cy.visit("/")
-      .wait("@gqllogInMutation")
-      .wait("@gqlListingsQuery")
+      .wait("@login")
+      .wait("@listings")
       .getByTestId("home-listings")
       .children()
       .eq(0)
@@ -51,6 +77,7 @@ describe(`Houze user flows`, () => {
       .should("have.length", 4)
       .getByTestId("listing-5d378db94e84753160e08b4c")
       .click()
+      .wait("@listing")
       .getByTestId("listing-booking-date-picker-check-in")
       .children()
       .eq(0)
@@ -97,6 +124,8 @@ describe(`Houze user flows`, () => {
       .getByTestId("listing-booking-modal-cta-btn")
       .click()
       .wait("@postStripeToken")
-      .wait("@gqlcreateBookingMutation");
+      .wait("@createBooking")
+      .get(".ant-notification")
+      .should("contain.text", "You've successfully booked the listing!");
   });
 });
