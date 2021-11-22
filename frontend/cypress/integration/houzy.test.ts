@@ -1,5 +1,12 @@
 import { setAliasMutation, setAliasAndResponse } from "utils";
-import { listings, login, tokenResponse, booking, listing } from "../fixtures";
+import {
+  listings,
+  login,
+  tokenResponse,
+  booking,
+  listing,
+  hostListing,
+} from "../fixtures";
 import dayjs from "dayjs";
 
 describe(`Houze user flows`, () => {
@@ -52,6 +59,16 @@ describe(`Houze user flows`, () => {
       },
       "listing"
     );
+
+    cy.interceptGQL(
+      "http://localhost:9000/api",
+      "hostListing",
+      {
+        data: hostListing,
+        erros: [],
+      },
+      "hostListing"
+    );
   });
   it(`As a user, when I'm on the home page
     When I see a selection of premium listings
@@ -59,7 +76,8 @@ describe(`Houze user flows`, () => {
     Then I am redirected to the listing detail page
     And I can see listing details
     And I can see host details
-    And I can book that listing`, () => {
+    And I can book that listing
+    And I can see a popup messaging stating my booking was successful`, () => {
     const now = dayjs();
     const tomorrow = now.add(1, "days").format("YYYY-MM-DD");
     const twoDaysAgo = now.subtract(2, "days").format("YYYY-MM-DD");
@@ -127,5 +145,60 @@ describe(`Houze user flows`, () => {
       .wait("@createBooking")
       .get(".ant-notification")
       .should("contain.text", "You've successfully booked the listing!");
+  });
+
+  it.only(`As a user, when I'm on the home page
+  When I see the host menu item in the header
+  And I click on it
+  Then I am redirected to the create listing page
+  And I can fill the form to create a listing`, () => {
+    cy.visit("/")
+      .wait("@login")
+      .wait("@listings")
+      .get('[role="menu"')
+      .children()
+      .eq(0)
+      .click()
+      .url()
+      .should("eq", `${Cypress.config().baseUrl}/host`)
+      .getByTestId("home-type")
+      .find("label")
+      .eq(1)
+      .click()
+      .getByTestId("num-of-guests")
+      .find("input")
+      .type("4")
+      .getByTestId("title")
+      .find("input")
+      .type("fancy apartment")
+      .getByTestId("description")
+      .find("textarea")
+      .type("gorgeous apartment")
+      .getByTestId("address")
+      .find("input")
+      .type("Rodeo Drive 123")
+      .getByTestId("city")
+      .find("input")
+      .type("Los Angeles")
+      .getByTestId("province")
+      .find("input")
+      .type("California")
+      .getByTestId("postal-code")
+      .find("input")
+      .type("12345")
+      .getByTestId("price")
+      .find("input")
+      .type("1205")
+      .getByTestId("image")
+      .find("input[type=file]")
+      .attachFile("test-image.jpeg")
+      .get("button[type=submit]")
+      .click()
+      .wait("@hostListing")
+      .url()
+      .should(
+        "eq",
+        `${Cypress.config().baseUrl}/listing/${hostListing.hostListing.id}`
+      );
   });
 });

@@ -177,6 +177,7 @@ export const Host = ({ viewer }: Props) => {
         <Form.Item
           label="Home Type"
           name="type"
+          data-testid="home-type"
           rules={[{ required: true, message: "Please select a home type!" }]}
         >
           <Radio.Group>
@@ -197,6 +198,7 @@ export const Host = ({ viewer }: Props) => {
           rules={[
             { required: true, message: "Please enter a max number of guests!" },
           ]}
+          data-testid="num-of-guests"
         >
           <InputNumber min={1} placeholder="4" />
         </Form.Item>
@@ -211,6 +213,7 @@ export const Host = ({ viewer }: Props) => {
               message: "Please enter a title for your listing!",
             },
           ]}
+          data-testid="title"
         >
           <Input maxLength={45} placeholder="Marylin Manson's Mansion" />
         </Form.Item>
@@ -224,6 +227,7 @@ export const Host = ({ viewer }: Props) => {
             },
           ]}
           extra="Max character count of 400"
+          data-testid="description"
         >
           <Input.TextArea
             rows={3}
@@ -241,6 +245,7 @@ export const Host = ({ viewer }: Props) => {
               message: "Please enter a address for your listing!",
             },
           ]}
+          data-testid="address"
         >
           <Input placeholder="251 North Bristol Avenue" />
         </Form.Item>
@@ -254,6 +259,7 @@ export const Host = ({ viewer }: Props) => {
               message: "Please enter a city (or region) for your listing!",
             },
           ]}
+          data-testid="city"
         >
           <Input placeholder="Los Angeles" />
         </Form.Item>
@@ -267,6 +273,7 @@ export const Host = ({ viewer }: Props) => {
               message: "Please enter a state (or province) for your listing!",
             },
           ]}
+          data-testid="province"
         >
           <Input placeholder="California" />
         </Form.Item>
@@ -280,6 +287,7 @@ export const Host = ({ viewer }: Props) => {
               message: "Please enter a zip (or postal) code for your listing!",
             },
           ]}
+          data-testid="postal-code"
         >
           <Input placeholder="Please enter a zip code for your listing!" />
         </Form.Item>
@@ -294,6 +302,7 @@ export const Host = ({ viewer }: Props) => {
               message: "Please enter provide an image for your listing!",
             },
           ]}
+          data-testid="image"
         >
           <div className="host__form-image-upload">
             <Upload
@@ -338,10 +347,11 @@ export const Host = ({ viewer }: Props) => {
               message: "Please enter a price for your listing!",
             },
           ]}
+          data-testid="price"
         >
           <InputNumber min={0} placeholder="120" />
         </Form.Item>
-        <Form.Item>
+        <Form.Item data-testid="submit-button">
           <Button type="primary" htmlType="submit">
             Submit
           </Button>
