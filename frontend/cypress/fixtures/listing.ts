@@ -26,3 +26,29 @@ export const listing: ListingData = {
     description: "Description here",
   },
 };
+
+export const createdListing: ListingData = {
+  listing: {
+    id: "123456",
+    title: "Beautiful 2 bedroom townhouse",
+    image:
+      "https://res.cloudinary.com/tiny-house/image/upload/v1560645408/mock/London/london-listing-5_jwyidl.jpg",
+    address: "44  Greyfriars Ave, London, United Kingdom",
+    price: 23483,
+    numOfGuests: 4,
+    host: {
+      id: "1234",
+      name: "Pepito",
+      avatar:
+        "https://lh3.googleusercontent.com/a-/AOh14GjZIFBQGChJSttvhydhZX8bMVW0NEVMx1USfsXbCQ=s100",
+      hasWallet: true,
+      __typename: "User",
+    },
+    type: ListingType.HOUSE,
+    city: "Madrid",
+    bookings: null,
+    bookingsIndex: '{"2022":{"4":{}}}',
+    __typename: "Listing",
+    description: "Description here",
+  },
+};

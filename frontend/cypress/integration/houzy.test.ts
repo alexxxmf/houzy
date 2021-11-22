@@ -7,7 +7,40 @@ import {
   listing,
   hostListing,
 } from "../fixtures";
+import { Listing as ListingData } from "../../src/graphql/queries/__generated__/Listing";
 import dayjs from "dayjs";
+import { ListingType } from "../../src/graphql/globalTypes";
+
+const dataForCreatedListing = {
+  title: "Fancy apartment",
+  description: "Gorgeous views and super comfy",
+  address: "Rodeo Drive 123",
+  city: "Los Angeles",
+  province: "California",
+  postalCode: "12345",
+  image: "test-image.jpeg",
+  price: 12000,
+  numOfGuests: 4,
+};
+
+export const newListing: ListingData = {
+  listing: {
+    ...dataForCreatedListing,
+    id: "123456",
+    host: {
+      id: "1234",
+      name: "Pepito",
+      avatar:
+        "https://lh3.googleusercontent.com/a-/AOh14GjZIFBQGChJSttvhydhZX8bMVW0NEVMx1USfsXbCQ=s100",
+      hasWallet: true,
+      __typename: "User",
+    },
+    type: ListingType.HOUSE,
+    bookings: null,
+    bookingsIndex: '{"2022":{"4":{}}}',
+    __typename: "Listing",
+  },
+};
 
 describe(`Houze user flows`, () => {
   beforeEach(() => {
@@ -28,7 +61,7 @@ describe(`Houze user flows`, () => {
       "Listings",
       {
         data: listings,
-        erros: [],
+        errors: [],
       },
       "listings"
     );
@@ -37,7 +70,7 @@ describe(`Houze user flows`, () => {
       "logIn",
       {
         data: login,
-        erros: [],
+        errors: [],
       },
       "login"
     );
@@ -55,7 +88,7 @@ describe(`Houze user flows`, () => {
       "Listing",
       {
         data: listing,
-        erros: [],
+        errors: [],
       },
       "listing"
     );
@@ -65,7 +98,7 @@ describe(`Houze user flows`, () => {
       "hostListing",
       {
         data: hostListing,
-        erros: [],
+        errors: [],
       },
       "hostListing"
     );
@@ -167,38 +200,48 @@ describe(`Houze user flows`, () => {
       .click()
       .getByTestId("num-of-guests")
       .find("input")
-      .type("4")
+      .type(`${dataForCreatedListing.numOfGuests}`)
       .getByTestId("title")
       .find("input")
-      .type("fancy apartment")
+      .type(`${dataForCreatedListing.title}`)
       .getByTestId("description")
       .find("textarea")
-      .type("gorgeous apartment")
+      .type(`${dataForCreatedListing.description}`)
       .getByTestId("address")
       .find("input")
-      .type("Rodeo Drive 123")
+      .type(`${dataForCreatedListing.address}`)
       .getByTestId("city")
       .find("input")
-      .type("Los Angeles")
+      .type(`${dataForCreatedListing.city}`)
       .getByTestId("province")
       .find("input")
-      .type("California")
+      .type(`${dataForCreatedListing.province}`)
       .getByTestId("postal-code")
       .find("input")
-      .type("12345")
+      .type(`${dataForCreatedListing.postalCode}`)
       .getByTestId("price")
       .find("input")
-      .type("1205")
+      .type(`${dataForCreatedListing.price}`)
       .getByTestId("image")
       .find("input[type=file]")
-      .attachFile("test-image.jpeg")
+      .attachFile(`${dataForCreatedListing.image}`)
       .get("button[type=submit]")
       .click()
+      .interceptGQL(
+        "http://localhost:9000/api",
+        "Listing",
+        {
+          data: newListing,
+          errors: [],
+        },
+        "createdListing"
+      )
       .wait("@hostListing")
       .url()
       .should(
         "eq",
         `${Cypress.config().baseUrl}/listing/${hostListing.hostListing.id}`
-      );
+      )
+      .wait("@createdListing");
   });
 });

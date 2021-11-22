@@ -10,7 +10,11 @@
     "esModuleInterop": true,
     "strict": true,
     "lib": ["dom", "dom.iterable", "esnext"],
-    "types": ["cypress", "cypress-plugin-stripe-elements"],
+    "types": [
+      "cypress",
+      "cypress-plugin-stripe-elements",
+      "cypress-file-upload"
+    ],
     "baseUrl": "./"
   },
   "include": ["**/*.ts"]
