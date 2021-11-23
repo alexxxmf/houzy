@@ -6,6 +6,8 @@ import {
   booking,
   listing,
   hostListing,
+  user,
+  userWithoutStripeConn,
 } from "../fixtures";
 import { Listing as ListingData } from "../../src/graphql/queries/__generated__/Listing";
 import dayjs from "dayjs";
@@ -102,6 +104,16 @@ describe(`Houze user flows`, () => {
       },
       "hostListing"
     );
+
+    cy.interceptGQL(
+      "http://localhost:9000/api",
+      "User",
+      {
+        data: userWithoutStripeConn,
+        errors: [],
+      },
+      "userWithoutStripeConn"
+    );
   });
   it(`As a user, when I'm on the home page
     When I see a selection of premium listings
@@ -180,7 +192,7 @@ describe(`Houze user flows`, () => {
       .should("contain.text", "You've successfully booked the listing!");
   });
 
-  it.only(`As a user, when I'm on the home page
+  it(`As a user, when I'm on the home page
   When I see the host menu item in the header
   And I click on it
   Then I am redirected to the create listing page
@@ -244,4 +256,38 @@ describe(`Houze user flows`, () => {
       )
       .wait("@createdListing");
   });
+
+  // // TODO: find an elegant way to deal with stripe's oauth
+  // // better to avoid inject cypressGlobals to conditionally play with the window object
+  // // or something similar
+  // it.only(`As a user, when I'm on the home page
+  // When I see the app header
+  // And I click on my profile
+  // Then I am redirected to my user page
+  // And I can connect my account to stripe
+  // and I can disconnect it back to how it was`, () => {
+  //   cy.visit("/")
+  //     .wait("@login")
+  //     .wait("@listings")
+  //     .get('[role="menu"')
+  //     .children()
+  //     .eq(1)
+  //     .click()
+  //     .get('a[href="/user/110304735686084337427"]')
+  //     .click()
+
+  //     .wait("@userWithoutStripeConn")
+  //     .getByTestId("user-profile")
+  //     .should("contain", `Name: ${userWithoutStripeConn.user.name}`)
+  //     .and("contain", `Contact: ${userWithoutStripeConn.user.contact}`)
+  //     .and("contain", "Connect with Stripe");
+  //   cy.window()
+  //     .then((window) => {
+  //       // @ts-ignore
+  //       cy.stub(window, "redirectToStripe");
+  //     })
+  //     .getByTestId("btn-connect-stripe")
+  //     .click();
+  //   // https://connect.stripe.com/oauth/v2/authorize?response_type=code&client_id=ca_Lk5K9KvQHZencmdvQnnXMrDStgoSqlwS&scope=read_write
+  // });
 });

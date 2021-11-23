@@ -50,9 +50,11 @@ const UserProfile = ({
     }
   );
 
-  const redirectToStripe = () => {
+  const redirectToStripe = (stripeOauthUrl: string) => {
     window.location.assign(stripeOauthUrl);
   };
+  // @ts-ignore
+  window.redirectToStripe = redirectToStripe;
 
   const additionalDetails = user.hasWallet ? (
     <>
@@ -88,7 +90,8 @@ const UserProfile = ({
       <Button
         type="primary"
         className="user-profile__details-cta"
-        onClick={redirectToStripe}
+        onClick={() => redirectToStripe(stripeOauthUrl)}
+        data-testid="btn-connect-stripe"
       >
         Connect with Stripe
       </Button>
@@ -117,7 +120,7 @@ const UserProfile = ({
   ) : null;
 
   return (
-    <div className="user-profile">
+    <div className="user-profile" data-testid="user-profile">
       <Card className="user-profile__card">
         <div className="user-profile__avatar">
           <Avatar size={100} src={user.avatar} />
