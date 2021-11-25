@@ -50,7 +50,7 @@ export const Listings = ({ match }: RouteComponentProps<MatchParams>) => {
 
   if (loading) {
     return (
-      <Content className="listings">
+      <Content className="listings" data-testid="listings-skeleton">
         <ListingsSkeleton />
       </Content>
     );
@@ -112,7 +112,7 @@ export const Listings = ({ match }: RouteComponentProps<MatchParams>) => {
   ) : null;
 
   return (
-    <Content className="listings">
+    <Content className="listings" data-testid="listings">
       {listingsRegionElement}
       {listingsSectionElement}
     </Content>
