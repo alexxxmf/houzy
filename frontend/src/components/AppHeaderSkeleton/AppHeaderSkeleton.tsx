@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout } from "antd";
 
-import logo from "../../assets/google_logo.jpg";
+import logo from "../../assets/houzy.png";
 
 const { Header } = Layout;
 
