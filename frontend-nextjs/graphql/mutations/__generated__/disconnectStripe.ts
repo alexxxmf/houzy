@@ -4,14 +4,14 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: disconnectStripe
+// GraphQL mutation operation: DisconnectStripe
 // ====================================================
 
-export interface disconnectStripe_disconnectStripe {
+export interface DisconnectStripe_disconnectStripe {
   __typename: "Viewer";
   hasWallet: boolean | null;
 }
 
-export interface disconnectStripe {
-  disconnectStripe: disconnectStripe_disconnectStripe;
+export interface DisconnectStripe {
+  disconnectStripe: DisconnectStripe_disconnectStripe;
 }

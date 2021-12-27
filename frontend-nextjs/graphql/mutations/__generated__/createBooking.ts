@@ -6,18 +6,18 @@
 import { CreateBookingInput } from "./../../globalTypes";
 
 // ====================================================
-// GraphQL mutation operation: createBooking
+// GraphQL mutation operation: CreateBooking
 // ====================================================
 
-export interface createBooking_createBooking {
+export interface CreateBooking_createBooking {
   __typename: "Booking";
   id: string;
 }
 
-export interface createBooking {
-  createBooking: createBooking_createBooking;
+export interface CreateBooking {
+  createBooking: CreateBooking_createBooking;
 }
 
-export interface createBookingVariables {
+export interface CreateBookingVariables {
   input: CreateBookingInput;
 }

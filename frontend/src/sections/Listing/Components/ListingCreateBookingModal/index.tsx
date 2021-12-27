@@ -1,10 +1,9 @@
 import React from "react";
 import { Modal, Button, Divider, Typography } from "antd";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { KeyOutlined } from "@ant-design/icons";
 import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { StripeCardElement } from "@stripe/stripe-js";
-import dayjs from "rc-picker/node_modules/dayjs";
 import {
   displayErrorMessage,
   displaySuccessNotification,

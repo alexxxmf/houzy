@@ -6,18 +6,18 @@
 import { HostListingInput } from "./../../globalTypes";
 
 // ====================================================
-// GraphQL mutation operation: hostListing
+// GraphQL mutation operation: HostListing
 // ====================================================
 
-export interface hostListing_hostListing {
+export interface HostListing_hostListing {
   __typename: "Listing";
   id: string;
 }
 
-export interface hostListing {
-  hostListing: hostListing_hostListing;
+export interface HostListing {
+  hostListing: HostListing_hostListing;
 }
 
-export interface hostListingVariables {
+export interface HostListingVariables {
   input: HostListingInput;
 }

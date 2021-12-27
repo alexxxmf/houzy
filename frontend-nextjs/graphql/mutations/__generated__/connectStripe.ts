@@ -6,18 +6,18 @@
 import { ConnectStripeInput } from "./../../globalTypes";
 
 // ====================================================
-// GraphQL mutation operation: connectStripe
+// GraphQL mutation operation: ConnectStripe
 // ====================================================
 
-export interface connectStripe_connectStripe {
+export interface ConnectStripe_connectStripe {
   __typename: "Viewer";
   hasWallet: boolean | null;
 }
 
-export interface connectStripe {
-  connectStripe: connectStripe_connectStripe;
+export interface ConnectStripe {
+  connectStripe: ConnectStripe_connectStripe;
 }
 
-export interface connectStripeVariables {
+export interface ConnectStripeVariables {
   input: ConnectStripeInput;
 }

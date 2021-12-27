@@ -24,6 +24,7 @@ const mount = async (app: Application) => {
     resolvers,
     context: ({ req, res }) => ({ db, req, res }),
   });
+
   server.applyMiddleware({
     app,
     path: "/api",
