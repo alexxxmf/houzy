@@ -2,11 +2,21 @@ import { MongoClient } from "mongodb";
 
 import { Database, Listing, User, Booking } from "../lib/types";
 
-const user = process.env.DB_USER;
-const password = process.env.DB_USER_PASSWORD;
+const user = process.env.MONGO_INITDB_ROOT_USERNAME;
+const password = process.env.MONGO_INITDB_ROOT_PASSWORD;
 const cluster = process.env.DB_CLUSTER;
+const mongoPort = process.env.MONGO_PORT;
+const mongoHost = process.env.MONGO_HOST;
 
-const url = `mongodb+srv://${user}:${password}@${cluster}.mongodb.net/main?retryWrites=true&w=majority`;
+let url: string;
+
+if (!!process.env.ATLAS) {
+  url = `mongodb+srv://${user}:${password}@${cluster}.mongodb.net/main?retryWrites=true&w=majority`;
+} else {
+  url = `mongodb://${user}:${password}@${mongoHost}${
+    mongoPort ? `:${mongoPort}` : ""
+  }/?authSource=admin`;
+}
 
 export const connectDatabase = async (): Promise<Database> => {
   const client = await MongoClient.connect(url, {

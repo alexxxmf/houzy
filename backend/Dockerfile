@@ -4,3 +4,4 @@ COPY ./package.json /app/
 RUN yarn
 COPY . /app/
 EXPOSE 9000
+CMD ["yarn", "start"]
