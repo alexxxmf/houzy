@@ -10,7 +10,7 @@ const mongoHost = process.env.MONGO_HOST;
 
 let url: string;
 
-if (!!process.env.ATLAS) {
+if (!!process.env.ATLAS && cluster) {
   url = `mongodb+srv://${user}:${password}@${cluster}.mongodb.net/main?retryWrites=true&w=majority`;
 } else {
   url = `mongodb://${user}:${password}@${mongoHost}${

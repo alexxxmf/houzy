@@ -782,8 +782,6 @@ const seed = async () => {
 
     const db = await connectDatabase();
 
-    console.log("db", db);
-
     for (const listing of listings) {
       await db.listings.insertOne(listing);
     }
